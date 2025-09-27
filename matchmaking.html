@@ -417,53 +417,88 @@
       }
 
       generateSampleProfiles() {
-        this.profiles = [
+        // Generate profiles based on survey responses
+        const baseProfiles = [
           {
             id: 1,
             name: "Alex",
-            bio: "Love hiking, photography, and building things. Looking for someone to create amazing projects with!",
-            activities: "hiking, photography, woodworking, stargazing",
-            goals: "creative collaboration, adventure partner, long-term relationship",
-            values: "creativity, authenticity, growth, environmental consciousness",
-            compatibility: 85
+            surveyData: {
+              favoriteAnimal: "eagle",
+              threeWords: "adventurous, creative, loyal",
+              vacationSpot: "mountain peaks and remote beaches",
+              nationalism: 3,
+              rightVsCreative: "creative",
+              welfareSupport: "conditional",
+              deserving: 3,
+              politicalLean: 2
+            }
           },
           {
             id: 2,
             name: "Jordan",
-            bio: "Tech enthusiast and strategy game lover. Want to find someone who shares my passion for problem-solving.",
-            activities: "gaming, coding, board games, urban exploration",
-            goals: "intellectual connection, shared hobbies, meaningful conversations",
-            values: "intelligence, humor, honesty, innovation",
-            compatibility: 78
+            surveyData: {
+              favoriteAnimal: "wolf",
+              threeWords: "analytical, determined, protective",
+              vacationSpot: "historic cities and cultural sites",
+              nationalism: 4,
+              rightVsCreative: "right",
+              welfareSupport: "no",
+              deserving: 4,
+              politicalLean: 4
+            }
           },
           {
             id: 3,
             name: "Sam",
-            bio: "Artist and nature lover. Seeking a partner who appreciates both creativity and the outdoors.",
-            activities: "painting, gardening, hiking, music",
-            goals: "artistic collaboration, outdoor adventures, emotional connection",
-            values: "beauty, nature, self-expression, compassion",
-            compatibility: 72
+            surveyData: {
+              favoriteAnimal: "butterfly",
+              threeWords: "artistic, empathetic, transformative",
+              vacationSpot: "art galleries and natural retreats",
+              nationalism: 2,
+              rightVsCreative: "both",
+              welfareSupport: "yes",
+              deserving: 2,
+              politicalLean: 2
+            }
           },
           {
             id: 4,
             name: "Casey",
-            bio: "Entrepreneur and fitness enthusiast. Looking for someone ambitious and health-conscious.",
-            activities: "fitness, business networking, cooking, travel",
-            goals: "power couple, shared success, active lifestyle",
-            values: "ambition, health, success, loyalty",
-            compatibility: 68
+            surveyData: {
+              favoriteAnimal: "lion",
+              threeWords: "ambitious, confident, strategic",
+              vacationSpot: "luxury resorts and business districts",
+              nationalism: 5,
+              rightVsCreative: "right",
+              welfareSupport: "conditional",
+              deserving: 5,
+              politicalLean: 5
+            }
           },
           {
             id: 5,
             name: "Riley",
-            bio: "Writer and coffee connoisseur. Want to find someone who loves deep conversations and good stories.",
-            activities: "writing, reading, coffee tasting, film analysis",
-            goals: "intellectual stimulation, creative partnership, emotional intimacy",
-            values: "creativity, intelligence, empathy, authenticity",
-            compatibility: 82
+            surveyData: {
+              favoriteAnimal: "owl",
+              threeWords: "wise, curious, thoughtful",
+              vacationSpot: "cozy bookshops and quiet libraries",
+              nationalism: 3,
+              rightVsCreative: "creative",
+              welfareSupport: "yes",
+              deserving: 3,
+              politicalLean: 2
+            }
           }
         ];
+
+        // Convert survey data to profile format
+        this.profiles = baseProfiles.map(profile => ({
+          ...profile,
+          bio: `${profile.surveyData.threeWords} | ${profile.surveyData.vacationSpot}`,
+          activities: `${profile.surveyData.favoriteAnimal} enthusiast, loves ${profile.surveyData.vacationSpot.split(' ')[0]} destinations`,
+          goals: `Find someone who shares my ${profile.surveyData.rightVsCreative === 'right' ? 'moral' : 'creative'} values`,
+          values: `Nationalism: ${profile.surveyData.nationalism}/5, Welfare: ${profile.surveyData.welfareSupport}, Political: ${profile.surveyData.politicalLean}/5`
+        }));
       }
 
       bindEvents() {
@@ -525,54 +560,83 @@
       }
 
       calculateCompatibility(profile) {
-        if (!this.userProfile) return Math.floor(Math.random() * 30) + 60;
+        if (!this.userProfile || !this.userProfile.surveyData || !profile.surveyData) {
+          return Math.floor(Math.random() * 30) + 60;
+        }
+        
+        const userSurvey = this.userProfile.surveyData;
+        const profileSurvey = profile.surveyData;
         
         let score = 0;
         let factors = 0;
         
-        // Compare activities
-        const userActivities = this.userProfile.activities.toLowerCase().split(',').map(a => a.trim());
-        const profileActivities = profile.activities.toLowerCase().split(',').map(a => a.trim());
-        const activityMatches = userActivities.filter(activity => 
-          profileActivities.some(profileActivity => 
-            profileActivity.includes(activity) || activity.includes(profileActivity)
-          )
-        ).length;
-        score += (activityMatches / userActivities.length) * 30;
-        factors += 30;
-        
-        // Compare goals
-        const userGoals = this.userProfile.goals.toLowerCase().split(',').map(g => g.trim());
-        const profileGoals = profile.goals.toLowerCase().split(',').map(g => g.trim());
-        const goalMatches = userGoals.filter(goal => 
-          profileGoals.some(profileGoal => 
-            profileGoal.includes(goal) || goal.includes(profileGoal)
-          )
-        ).length;
-        score += (goalMatches / userGoals.length) * 25;
-        factors += 25;
-        
-        // Compare values
-        const userValues = this.userProfile.values.toLowerCase().split(',').map(v => v.trim());
-        const profileValues = profile.values.toLowerCase().split(',').map(v => v.trim());
-        const valueMatches = userValues.filter(value => 
-          profileValues.some(profileValue => 
-            profileValue.includes(value) || value.includes(profileValue)
-          )
-        ).length;
-        score += (valueMatches / userValues.length) * 25;
-        factors += 25;
-        
-        // Bio similarity (simple keyword matching)
-        const userBioWords = this.userProfile.bio.toLowerCase().split(' ');
-        const profileBioWords = profile.bio.toLowerCase().split(' ');
-        const bioMatches = userBioWords.filter(word => 
-          word.length > 3 && profileBioWords.includes(word)
-        ).length;
-        score += Math.min((bioMatches / userBioWords.length) * 20, 20);
+        // Animal compatibility (20 points)
+        if (userSurvey.favoriteAnimal === profileSurvey.favoriteAnimal) {
+          score += 20;
+        } else {
+          // Partial compatibility for similar animals
+          const animalGroups = {
+            'lion': ['tiger', 'wolf'],
+            'eagle': ['owl'],
+            'wolf': ['lion', 'tiger'],
+            'dolphin': ['butterfly'],
+            'elephant': ['owl'],
+            'butterfly': ['dolphin'],
+            'tiger': ['lion', 'wolf'],
+            'owl': ['eagle', 'elephant']
+          };
+          
+          if (animalGroups[userSurvey.favoriteAnimal]?.includes(profileSurvey.favoriteAnimal) ||
+              animalGroups[profileSurvey.favoriteAnimal]?.includes(userSurvey.favoriteAnimal)) {
+            score += 10;
+          }
+        }
         factors += 20;
         
-        return Math.min(Math.floor(score), 95);
+        // Political leanings compatibility (25 points)
+        const politicalDiff = Math.abs(userSurvey.politicalLean - profileSurvey.politicalLean);
+        score += Math.max(0, 25 - (politicalDiff * 6.25));
+        factors += 25;
+        
+        // Nationalism compatibility (15 points)
+        const nationalismDiff = Math.abs(userSurvey.nationalism - profileSurvey.nationalism);
+        score += Math.max(0, 15 - (nationalismDiff * 3.75));
+        factors += 15;
+        
+        // Deserving people compatibility (15 points)
+        const deservingDiff = Math.abs(userSurvey.deserving - profileSurvey.deserving);
+        score += Math.max(0, 15 - (deservingDiff * 3.75));
+        factors += 15;
+        
+        // Right vs Creative compatibility (15 points)
+        if (userSurvey.rightVsCreative === profileSurvey.rightVsCreative) {
+          score += 15;
+        } else if (userSurvey.rightVsCreative === 'both' || profileSurvey.rightVsCreative === 'both') {
+          score += 10;
+        } else {
+          score += 5; // Some compatibility even if different
+        }
+        factors += 15;
+        
+        // Welfare support compatibility (10 points)
+        if (userSurvey.welfareSupport === profileSurvey.welfareSupport) {
+          score += 10;
+        } else if (userSurvey.welfareSupport === 'conditional' || profileSurvey.welfareSupport === 'conditional') {
+          score += 6;
+        } else if ((userSurvey.welfareSupport === 'yes' && profileSurvey.welfareSupport === 'no') ||
+                   (userSurvey.welfareSupport === 'no' && profileSurvey.welfareSupport === 'yes')) {
+          score += 2; // Some compatibility even if opposite
+        } else {
+          score += 4; // Unsure gets partial points
+        }
+        factors += 10;
+        
+        // Add some randomness for demo purposes (5-15 points)
+        const randomBonus = Math.random() * 10 + 5;
+        score += randomBonus;
+        factors += randomBonus;
+        
+        return Math.min(Math.floor((score / factors) * 100), 95);
       }
 
       swipeProfile(direction) {

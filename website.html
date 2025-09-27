@@ -468,6 +468,156 @@
       }
     }
 
+    /* Survey Styles */
+    .survey-form {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .question-group {
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 16px;
+      border: 2px solid rgba(119, 132, 114, 0.25);
+      padding: 24px;
+    }
+
+    .question-title {
+      font-family: 'Lora', serif;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--deep-forest);
+    }
+
+    .question-description {
+      font-size: 14px;
+      color: var(--olive-slate);
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .form-group.horizontal {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border: 2px solid rgba(119, 132, 114, 0.3);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.5);
+      transition: all var(--transition);
+      cursor: pointer;
+    }
+
+    .radio-option:hover {
+      border-color: var(--vivid-mint);
+      background: rgba(125, 205, 133, 0.1);
+    }
+
+    .radio-option input[type="radio"] {
+      margin: 0;
+    }
+
+    .radio-option input[type="radio"]:checked + label {
+      color: var(--vivid-mint);
+      font-weight: 600;
+    }
+
+    .radio-option:has(input[type="radio"]:checked) {
+      border-color: var(--vivid-mint);
+      background: rgba(125, 205, 133, 0.15);
+    }
+
+    .scale-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .scale-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: var(--olive-slate);
+    }
+
+    .scale-slider {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: var(--fog-grey);
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .scale-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--vivid-mint);
+      cursor: pointer;
+      border: 2px solid var(--deep-forest);
+    }
+
+    .scale-slider::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--vivid-mint);
+      cursor: pointer;
+      border: 2px solid var(--deep-forest);
+    }
+
+    input[type="color"] {
+      width: 60px;
+      height: 40px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--fog-grey);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--vivid-mint), #69b471);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .progress-text {
+      text-align: center;
+      font-size: 14px;
+      color: var(--olive-slate);
+      margin-bottom: 20px;
+    }
+
     @media (max-width: 640px) {
       header.top-bar {
         padding: 32px 24px 24px;
@@ -483,6 +633,10 @@
         grid-column: span 4;
         padding: 20px;
       }
+      
+      .radio-group {
+        gap: 12px;
+      }
     }
   </style>
 </head>
@@ -493,37 +647,16 @@
   </header>
 
   <main class="layout">
-    <section class="card profile-card wide" aria-labelledby="profile-heading">
+    <section class="card profile-card full" aria-labelledby="profile-heading">
       <div>
-        <h2 id="profile-heading">Tell us about your constellation</h2>
-        <p class="caption">Share a few essentials and we will queue you for a compatible co-architect.</p>
+        <h2 id="profile-heading">Complete Your Profile Survey</h2>
+        <p class="caption">Help us understand your personality and preferences to find your perfect civilization partner</p>
       </div>
-      <form class="profile-grid" novalidate>
-        <label class="field" for="name">
-          <span>Name</span>
-          <input id="name" name="name" type="text" maxlength="48" placeholder="Evelyn" autocomplete="name" />
-        </label>
-        <label class="field" for="bio">
-          <span>Story snapshot</span>
-          <textarea id="bio" name="bio" placeholder="Glacial hikes, analog photography, tea rituals…"></textarea>
-        </label>
-        <label class="field" for="activities">
-          <span>Favorite activities</span>
-          <input id="activities" name="activities" type="text" placeholder="urban foraging, stargazing, zine-making" />
-        </label>
-        <label class="field" for="goals">
-          <span>Relationship goals</span>
-          <input id="goals" name="goals" type="text" placeholder="slow burn, creative collaborator" />
-        </label>
-        <label class="field" for="values">
-          <span>Core values</span>
-          <input id="values" name="values" type="text" placeholder="curiosity, honesty, playfulness" />
-        </label>
-      </form>
-      <div class="actions">
-        <button class="primary" id="createProfile">Create profile</button>
-        <button class="secondary" id="clearForm" type="button">Reset</button>
+      
+      <div id="surveyContainer">
+        <!-- Survey will be loaded here -->
       </div>
+      
       <div id="profileStatus" class="status-copy" role="status" aria-live="polite"></div>
     </section>
 
@@ -550,6 +683,7 @@
 
   <script src="nationship-civilization.js"></script>
   <script src="nationship-chatbot.js"></script>
+  <script src="profile-survey-integration.js"></script>
   <script>
     const state = {
       userId: null,
@@ -562,13 +696,7 @@
     };
 
     const elements = {
-      name: document.getElementById('name'),
-      bio: document.getElementById('bio'),
-      activities: document.getElementById('activities'),
-      goals: document.getElementById('goals'),
-      values: document.getElementById('values'),
-      createProfile: document.getElementById('createProfile'),
-      clearForm: document.getElementById('clearForm'),
+      surveyContainer: document.getElementById('surveyContainer'),
       profileStatus: document.getElementById('profileStatus'),
       requestMatch: document.getElementById('requestMatch'),
       matchStatus: document.getElementById('matchStatus'),
@@ -599,41 +727,11 @@
       }
     }
 
-    function resetForm() {
-      [elements.name, elements.bio, elements.activities, elements.goals, elements.values].forEach(field => field.value = '');
-      setStatus(elements.profileStatus, '');
-    }
-
-
-    async function createProfile() {
-      const name = elements.name.value.trim();
-      if (!name) {
-        setStatus(elements.profileStatus, 'Please share your name to join the constellation.', 'error');
-        return;
-      }
-      
-      // Generate a unique user ID for demo purposes
-      const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-      
-      const profileData = {
-        userId: userId,
-        name: name,
-        bio: elements.bio.value,
-        activities: elements.activities.value,
-        goals: elements.goals.value,
-        values: elements.values.value,
-        created: new Date().toISOString()
-      };
-      
-      try {
-        // Simulate API call delay for demo
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Store profile data in localStorage
-        localStorage.setItem('nationship_profile', JSON.stringify(profileData));
-        
-        state.userId = userId;
-        setStatus(elements.profileStatus, `Profile for ${name} is live. Your user ID is ${userId}.`, 'success');
+    function loadSurvey() {
+      new ProfileSurveyIntegration('surveyContainer', (profileData) => {
+        // Survey completed successfully
+        state.userId = profileData.userId;
+        setStatus(elements.profileStatus, `Profile for ${profileData.name} is complete! Your user ID is ${profileData.userId}.`, 'success');
         showToast('Profile created — welcome aboard!', 'success');
         elements.requestMatch.disabled = false;
         
@@ -647,10 +745,7 @@
           state.queueInterval = setInterval(refreshQueue, 6000);
         }
         refreshQueue();
-      } catch (err) {
-        setStatus(elements.profileStatus, 'Profile creation failed. Please try again.', 'error');
-        showToast('Profile creation failed. Please try again.', 'error');
-      }
+      });
     }
 
     async function refreshQueue() {
@@ -784,14 +879,6 @@
     }
 
     function init() {
-      elements.createProfile.addEventListener('click', event => {
-        event.preventDefault();
-        createProfile();
-      });
-      elements.clearForm.addEventListener('click', event => {
-        event.preventDefault();
-        resetForm();
-      });
       elements.requestMatch.addEventListener('click', event => {
         event.preventDefault();
         requestMatch();
@@ -804,6 +891,9 @@
       elements.requestMatch.disabled = true;
       refreshQueue();
       state.queueInterval = setInterval(refreshQueue, 8000);
+      
+      // Load the survey
+      loadSurvey();
       
       // Initialize Nationship system
       initNationship();

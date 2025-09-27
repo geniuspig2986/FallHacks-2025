@@ -41,72 +41,47 @@ A revolutionary dating app that incorporates civilization expansion for gamified
 
 ### Files Structure
 ```
-├── index.html                 # Main demo page
-├── websiteMatch.html             # Full dating app interface
-├── nationship-civilization.js  # Core civilization system
-├── nationship-chatbot.js    # AI chatbot for demo
-├── nationship-styles.css    # Complete styling system
-└── README.md               # This file
+├── index.html                  # Starting page, enter to
+├── websiteCiv.html             # App interface for civilization
+├── websiteProf.html            # Interface for profile and survey
+├── websiteMatch.html           # Matchmaking site
+├── nationshiplogo.png          # Title on most pages
+├── nationshipname.png          # Logo currently unused
+├── nationship-styles.css       # Complete styling system
+└── README.md                   # This file
 ```
 
 ### Key Technologies
-- **Vanilla JavaScript**: No dependencies, runs locally
 - **CSS Grid & Flexbox**: Responsive design
 - **Web Fonts**: Lora (serif) + Inter (sans-serif)
 - **Modular Architecture**: Easy to extend and customize
 
 ### Browser Compatibility
 - Chrome, Firefox, Safari, Edge (modern versions)
-- Mobile responsive design
 - No external dependencies required
 
 ## 🎯 Hackathon Presentation
 
 ### Demo Flow (2-3 minutes)
-1. **Introduction** (30s): Show the concept and features
-2. **Live Demo** (90s): Start demo mode, show chatbot conversations
-3. **Civilization Growth** (60s): Demonstrate progression and battles
-4. **Consequences** (30s): Show decay system and collaboration requirements
+1. **Introduction** (1min): Show the concept and features
+2. **Live Demo** (2min): Start demo mode, show chatbot conversations
+3. **Questions** (1min): Answer questions and show other unique features
 
 ### Key Talking Points
 - **Unique Concept**: First dating app to combine civilization building with matchmaking
 - **Gamification**: Strategic gameplay encourages meaningful conversation
 - **Collaboration**: Both partners must work together to succeed
-- **Consequences**: Real penalties for poor communication
-- **Scalability**: Easy to integrate with existing dating platforms
+- **Consequences**: Penalties for poor communication
 
 ### Technical Highlights
 - **No Backend Required**: Fully client-side for hackathon demo
-- **Modular Design**: Easy to integrate with real dating apps
 - **AI Integration**: Smart chatbot for realistic conversations
-- **Responsive**: Works on all devices
 - **Extensible**: Easy to add new features and stages
 
-## 🔧 Customization
+### 🔧 Customization
 
-### Adding New Civilization Stages
-```javascript
-// In nationship-civilization.js
-this.stages.push({
-  name: "Your Stage Name",
-  description: "Stage description...",
-  features: ["Feature 1", "Feature 2"],
-  messagesRequired: 2500,
-  emoji: "🚀",
-  militaryPower: 8000,
-  resources: { food: 50000, materials: 30000, population: 25000 }
-});
-```
-
-### Customizing Chatbot Responses
-```javascript
-// In nationship-chatbot.js
-this.conversationFlows.yourFlow = [
-  "Custom response 1",
-  "Custom response 2",
-  "Custom response 3"
-];
-```
+- Remembers your profile on subsequent visits
+- Customize your preference and matching criteria through a fun quiz
 
 ### Styling Customization
 ```css
@@ -143,17 +118,13 @@ this.conversationFlows.yourFlow = [
 - Real user matching system
 - Basic chat integration
 - Core civilization mechanics
-
-### Phase 2: Enhanced Features
-- Advanced AI personalities
+- More collaborative game features
 - More civilization stages
 - Social features and leaderboards
-
-### Phase 3: Platform Integration
-- Integration with existing dating apps
 - Mobile app development
 - Advanced analytics and matching
+- Monetization and marketing
 
 ---
 
-**Ready to revolutionize dating? Start the demo and watch civilizations grow!** 🏛️💕
+**Ready to revolutionize dating? Start index.html and watch civilizations grow!** 🏛️💕

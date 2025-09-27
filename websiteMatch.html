@@ -58,7 +58,6 @@
       font-size: 18px;
       color: var(--olive-slate);
       margin-bottom: 32px;
-      margin-top: 16px;
     }
 
     .tabs {
@@ -477,7 +476,7 @@
 <body>
   <div class="container">
     <div class="header">
-      <img class="nationship-title" src="nationshipname.png" alt="backup" width = "360rem"/> 
+      <div class="brand">Nationship</div>
       <div class="tagline">Find your perfect civilization partner</div>
     </div>
 
@@ -1144,8 +1143,10 @@
         `;
         chatDemo.appendChild(aiIntro);
         
+        
         // Update civilization status
         this.updateCivilizationStatus();
+
         
         // Scroll to civilization tab
         document.getElementById('civilization-tab').scrollIntoView({ behavior: 'smooth' });

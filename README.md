@@ -1,21 +1,15 @@
 # Nationship - Civilization Matchmaking
 
-A revolutionary dating app that fuses conversation with civilization building, creating meaningful connections through shared strategic gameplay.
+A revolutionary dating app that incorporates civilization expansion for gamified matchmaking.
 
 ## 🏛️ Hackathon Demo
 
 ### Quick Start
-1. Open `demo.html` in your browser
-2. The demo will auto-start after 3 seconds
+1. Open `index.html` in your browser
+2. The demo will auto-start
 3. Watch the AI chatbot simulate realistic conversations
 4. See how chat drives civilization progression
 5. Experience battles, raids, and strategic decisions
-
-### Demo Controls
-- **D Key**: Start/Stop demo
-- **F Key**: Toggle feature overview
-- **R Key**: Reset demo
-- **Demo Mode Button**: Manual demo control
 
 ## 🎮 Features Demonstrated
 
@@ -26,7 +20,7 @@ A revolutionary dating app that fuses conversation with civilization building, c
 - Automatic conversation flow management
 
 ### Civilization Progression
-- **10 Stages**: From Tribal Beginnings to Transcendent Civilization
+- **8 Stages**: From Tribal Beginnings to Transcendent Civilization
 - **Resource Management**: Food, materials, population tracking
 - **Visual Feedback**: Progress bars, animations, real-time updates
 - **Strategic Decisions**: Territory expansion, defense fortification
@@ -47,8 +41,8 @@ A revolutionary dating app that fuses conversation with civilization building, c
 
 ### Files Structure
 ```
-├── demo.html                 # Main hackathon demo page
-├── website.html             # Full dating app interface
+├── index.html                 # Main demo page
+├── websiteMatch.html             # Full dating app interface
 ├── nationship-civilization.js  # Core civilization system
 ├── nationship-chatbot.js    # AI chatbot for demo
 ├── nationship-styles.css    # Complete styling system

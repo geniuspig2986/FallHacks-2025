@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nationship — Create Your Profile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --deep-forest: #243119;
+      --olive-slate: #778472;
+      --vivid-mint: #7dcd85;
+      --soft-sage: #c2e1c2;
+      --fog-grey: #bac7be;
+      --amber: #e0a800;
+      --brick-red: #b84c4c;
+      --soft-shadow: 0 20px 40px rgba(36, 49, 25, 0.18);
+      --card-radius: 20px;
+      --transition: 0.2s ease-out;
+      color-scheme: light;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, rgba(194, 225, 194, 0.85), rgba(186, 199, 190, 0.65)), #c2e1c2;
+      color: var(--deep-forest);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .brand {
+      font-family: 'Lora', serif;
+      font-weight: 700;
+      font-size: 48px;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      color: var(--deep-forest);
+    }
+
+    .tagline {
+      font-size: 18px;
+      color: var(--olive-slate);
+      margin-bottom: 32px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 32px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 16px;
+      padding: 8px;
+      backdrop-filter: blur(6px);
+    }
+
+    .tab {
+      flex: 1;
+      padding: 16px 24px;
+      border: none;
+      background: transparent;
+      color: var(--olive-slate);
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 12px;
+      transition: all var(--transition);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .tab.active {
+      background: var(--vivid-mint);
+      color: var(--deep-forest);
+      box-shadow: 0 4px 12px rgba(125, 205, 133, 0.3);
+    }
+
+    .tab:hover:not(.active) {
+      background: rgba(194, 225, 194, 0.4);
+      color: var(--deep-forest);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .survey-container {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: var(--card-radius);
+      border: 2px solid rgba(119, 132, 114, 0.35);
+      box-shadow: var(--soft-shadow);
+      padding: 40px;
+      backdrop-filter: blur(6px);
+      min-height: 600px;
+    }
+
+    .survey-progress {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 16px;
+      border: 2px solid rgba(119, 132, 114, 0.25);
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 8px;
+      background: var(--fog-grey);
+      border-radius: 4px;
+      margin: 0 20px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--vivid-mint), #69b471);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .progress-text {
+      font-weight: 600;
+      color: var(--deep-forest);
+    }
+
+    .question-card {
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 20px;
+      border: 2px solid rgba(119, 132, 114, 0.3);
+      padding: 32px;
+      margin-bottom: 24px;
+      transition: all var(--transition);
+      box-shadow: 0 8px 24px rgba(36, 49, 25, 0.1);
+    }
+
+    .question-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(36, 49, 25, 0.15);
+    }
+
+    .question-number {
+      display: inline-block;
+      background: var(--vivid-mint);
+      color: var(--deep-forest);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .question-title {
+      font-family: 'Lora', serif;
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--deep-forest);
+    }
+
+    .question-description {
+      font-size: 16px;
+      color: var(--olive-slate);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-group.horizontal {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    label {
+      font-weight: 500;
+      color: var(--deep-forest);
+      cursor: pointer;
+    }
+
+    input[type="text"], 
+    input[type="color"],
+    textarea,
+    select {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      border: 2px solid var(--deep-forest);
+      border-radius: 12px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--deep-forest);
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+
+    input[type="text"]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--vivid-mint);
+      box-shadow: 0 0 0 3px rgba(125, 205, 133, 0.2);
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    input[type="color"] {
+      width: 80px;
+      height: 50px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px;
+      border: 2px solid rgba(119, 132, 114, 0.3);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.7);
+      transition: all var(--transition);
+      cursor: pointer;
+    }
+
+    .radio-option:hover {
+      border-color: var(--vivid-mint);
+      background: rgba(125, 205, 133, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .radio-option input[type="radio"] {
+      margin: 0;
+      width: 20px;
+      height: 20px;
+    }
+
+    .radio-option input[type="radio"]:checked + label {
+      color: var(--vivid-mint);
+      font-weight: 600;
+    }
+
+    .radio-option:has(input[type="radio"]:checked) {
+      border-color: var(--vivid-mint);
+      background: rgba(125, 205, 133, 0.15);
+      box-shadow: 0 4px 12px rgba(125, 205, 133, 0.2);
+    }
+
+    .scale-group {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .scale-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: var(--olive-slate);
+      font-weight: 500;
+    }
+
+    .scale-slider {
+      width: 100%;
+      height: 12px;
+      border-radius: 6px;
+      background: var(--fog-grey);
+      outline: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+
+    .scale-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--vivid-mint);
+      cursor: pointer;
+      border: 3px solid var(--deep-forest);
+      box-shadow: 0 2px 8px rgba(125, 205, 133, 0.3);
+    }
+
+    .scale-slider::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--vivid-mint);
+      cursor: pointer;
+      border: 3px solid var(--deep-forest);
+      box-shadow: 0 2px 8px rgba(125, 205, 133, 0.3);
+    }
+
+    .scale-value {
+      text-align: center;
+      font-size: 16px;
+      color: var(--vivid-mint);
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    .survey-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-top: 32px;
+    }
+
+    .btn {
+      padding: 16px 32px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-primary {
+      background: var(--vivid-mint);
+      color: var(--deep-forest);
+    }
+
+    .btn-primary:hover {
+      background: #69b471;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(125, 205, 133, 0.3);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--deep-forest);
+      border: 2px solid var(--deep-forest);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(194, 225, 194, 0.6);
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      background: var(--fog-grey);
+      color: var(--olive-slate);
+      border-color: transparent;
+      box-shadow: none;
+    }
+
+    .status-message {
+      text-align: center;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 24px;
+      font-weight: 500;
+      font-size: 16px;
+    }
+
+    .status-success {
+      background: rgba(125, 205, 133, 0.2);
+      color: var(--deep-forest);
+      border: 2px solid var(--vivid-mint);
+    }
+
+    .status-error {
+      background: rgba(184, 76, 76, 0.2);
+      color: var(--brick-red);
+      border: 2px solid var(--brick-red);
+    }
+
+    .queue-section, .civilization-section {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: var(--card-radius);
+      border: 2px solid rgba(119, 132, 114, 0.35);
+      box-shadow: var(--soft-shadow);
+      padding: 40px;
+      backdrop-filter: blur(6px);
+      min-height: 600px;
+    }
+
+    .queue-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 20px;
+      border-radius: 16px;
+      border: 2px solid rgba(119, 132, 114, 0.35);
+      background: rgba(255, 255, 255, 0.6);
+      margin-bottom: 16px;
+    }
+
+    .queue-empty {
+      text-align: center;
+      color: var(--olive-slate);
+      padding: 40px;
+      font-style: italic;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120%);
+      background: rgba(36, 49, 25, 0.95);
+      color: white;
+      padding: 16px 24px;
+      border-radius: 16px;
+      box-shadow: 0 16px 32px rgba(36, 49, 25, 0.45);
+      font-size: 16px;
+      transition: transform 0.3s ease-out;
+      z-index: 1000;
+    }
+
+    .toast.visible {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px 10px;
+      }
+      
+      .survey-container {
+        padding: 24px;
+      }
+      
+      .tabs {
+        flex-direction: column;
+      }
+      
+      .question-card {
+        padding: 24px;
+      }
+      
+      .survey-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="brand">Nationship</div>
+      <div class="tagline">Find your perfect civilization partner</div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab" data-tab="survey">Profile Survey</button>
+      <button class="tab" data-tab="matchmaking">Matchmaking</button>
+      <button class="tab active" data-tab="civilization">Civilization</button>
+    </div>
+
+    <!-- Survey Tab -->
+    <div class="tab-content" id="survey-tab">
+      <div class="survey-container">
+        <div class="survey-progress">
+          <span class="progress-text">Question <span id="currentQuestion">1</span> of <span id="totalQuestions">9</span></span>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 11%"></div>
+          </div>
+          <span class="progress-text" id="progressPercent">11%</span>
+        </div>
+
+        <form id="surveyForm">
+          <!-- Question 1: Favorite Color -->
+          <div class="question-card" data-question="1">
+            <div class="question-number">Question 1</div>
+            <h3 class="question-title">What is your favourite colour?</h3>
+            <p class="question-description">Choose the color that best represents you</p>
+            <div class="form-group">
+              <label for="favoriteColor">Select your favorite color:</label>
+              <input type="color" id="favoriteColor" name="favoriteColor" value="#7dcd85">
+            </div>
+          </div>
+
+          <!-- Question 2: Favorite Animal -->
+          <div class="question-card" data-question="2" style="display: none;">
+            <div class="question-number">Question 2</div>
+            <h3 class="question-title">What is your favourite animal?</h3>
+            <p class="question-description">Pick the animal that resonates with your personality</p>
+            <div class="form-group">
+              <label for="favoriteAnimal">Your favorite animal:</label>
+              <select id="favoriteAnimal" name="favoriteAnimal" required>
+                <option value="">Select an animal...</option>
+                <option value="lion">Lion - Bold and courageous</option>
+                <option value="eagle">Eagle - Visionary and free</option>
+                <option value="wolf">Wolf - Loyal and protective</option>
+                <option value="dolphin">Dolphin - Intelligent and playful</option>
+                <option value="elephant">Elephant - Wise and strong</option>
+                <option value="butterfly">Butterfly - Transformative and graceful</option>
+                <option value="tiger">Tiger - Powerful and independent</option>
+                <option value="owl">Owl - Wise and mysterious</option>
+                <option value="other">Other (please specify)</option>
+              </select>
+              <input type="text" id="otherAnimal" name="otherAnimal" placeholder="Specify your favorite animal" style="display: none;">
+            </div>
+          </div>
+
+          <!-- Question 3: Three Words -->
+          <div class="question-card" data-question="3" style="display: none;">
+            <div class="question-number">Question 3</div>
+            <h3 class="question-title">If you could describe yourself with three words, what would they be?</h3>
+            <p class="question-description">Share three words that best capture your essence</p>
+            <div class="form-group">
+              <label for="threeWords">Three words that describe you:</label>
+              <input type="text" id="threeWords" name="threeWords" placeholder="e.g., creative, adventurous, kind" required>
+            </div>
+          </div>
+
+          <!-- Question 4: Ideal Vacation Spot -->
+          <div class="question-card" data-question="4" style="display: none;">
+            <div class="question-number">Question 4</div>
+            <h3 class="question-title">Where is your ideal vacation spot?</h3>
+            <p class="question-description">Describe your dream destination</p>
+            <div class="form-group">
+              <label for="vacationSpot">Your ideal vacation spot:</label>
+              <textarea id="vacationSpot" name="vacationSpot" placeholder="Describe your perfect vacation destination..." required></textarea>
+            </div>
+          </div>
+
+          <!-- Question 5: Nationalism -->
+          <div class="question-card" data-question="5" style="display: none;">
+            <div class="question-number">Question 5</div>
+            <h3 class="question-title">Do you have a strong sense of nationalism?</h3>
+            <p class="question-description">Rate your level of national pride and identity</p>
+            <div class="form-group">
+              <div class="scale-group">
+                <div class="scale-labels">
+                  <span>Not at all</span>
+                  <span>Very strong</span>
+                </div>
+                <input type="range" class="scale-slider" id="nationalism" name="nationalism" min="1" max="5" value="3">
+                <div class="scale-value" id="nationalismValue">3 - Moderate</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Question 6: Right vs Creative -->
+          <div class="question-card" data-question="6" style="display: none;">
+            <div class="question-number">Question 6</div>
+            <h3 class="question-title">What is more important, doing something you know is right or being creative?</h3>
+            <p class="question-description">Choose which value you prioritize more</p>
+            <div class="form-group">
+              <div class="radio-group">
+                <div class="radio-option">
+                  <input type="radio" id="rightChoice" name="rightVsCreative" value="right">
+                  <label for="rightChoice">Doing something I know is right</label>
+                </div>
+                <div class="radio-option">
+                  <input type="radio" id="creativeChoice" name="rightVsCreative" value="creative">
+                  <label for="creativeChoice">Being creative</label>
+                </div>
+                <div class="radio-option">
+                  <input type="radio" id="bothChoice" name="rightVsCreative" value="both">
+                  <label for="bothChoice">Both are equally important</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Question 7: Welfare Support -->
+          <div class="question-card" data-question="7" style="display: none;">
+            <div class="question-number">Question 7</div>
+            <h3 class="question-title">Should we allow welfares?</h3>
+            <p class="question-description">Share your thoughts on social welfare programs</p>
+            <div class="form-group">
+              <div class="radio-group">
+                <div class="radio-option">
+                  <input type="radio" id="welfareYes" name="welfareSupport" value="yes">
+                  <label for="welfareYes">Yes, welfare programs are essential</label>
+                </div>
+                <div class="radio-option">
+                  <input type="radio" id="welfareNo" name="welfareSupport" value="no">
+                  <label for="welfareNo">No, welfare creates dependency</label>
+                </div>
+                <div class="radio-option">
+                  <input type="radio" id="welfareConditional" name="welfareSupport" value="conditional">
+                  <label for="welfareConditional">Yes, but with conditions and limits</label>
+                </div>
+                <div class="radio-option">
+                  <input type="radio" id="welfareUnsure" name="welfareSupport" value="unsure">
+                  <label for="welfareUnsure">I'm not sure</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Question 8: Deserving People -->
+          <div class="question-card" data-question="8" style="display: none;">
+            <div class="question-number">Question 8</div>
+            <h3 class="question-title">Are some people more deserving than others?</h3>
+            <p class="question-description">Share your perspective on equality and merit</p>
+            <div class="form-group">
+              <div class="scale-group">
+                <div class="scale-labels">
+                  <span>Everyone is equal</span>
+                  <span>Some are more deserving</span>
+                </div>
+                <input type="range" class="scale-slider" id="deserving" name="deserving" min="1" max="5" value="3">
+                <div class="scale-value" id="deservingValue">3 - Balanced view</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Question 9: Political Leanings -->
+          <div class="question-card" data-question="9" style="display: none;">
+            <div class="question-number">Question 9</div>
+            <h3 class="question-title">Are you left leaning or right leaning?</h3>
+            <p class="question-description">Indicate your general political orientation</p>
+            <div class="form-group">
+              <div class="scale-group">
+                <div class="scale-labels">
+                  <span>Left leaning</span>
+                  <span>Right leaning</span>
+                </div>
+                <input type="range" class="scale-slider" id="politicalLean" name="politicalLean" min="1" max="5" value="3">
+                <div class="scale-value" id="politicalValue">3 - Centrist</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="survey-actions">
+            <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;">Previous</button>
+            <button type="button" class="btn btn-primary" id="nextBtn">Next</button>
+            <button type="submit" class="btn btn-primary" id="submitBtn" style="display: none;">Complete Survey</button>
+          </div>
+
+          <div id="statusMessage" class="status-message" style="display: none;"></div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Matchmaking Tab -->
+    <div class="tab-content" id="matchmaking-tab">
+      <div class="queue-section">
+        <h2>Matchmaking Queue</h2>
+        <p class="caption">We pair compatible voyagers as soon as two profiles align.</p>
+        <div class="status-copy" id="matchStatus" role="status" aria-live="polite">Complete your profile survey to enable matchmaking.</div>
+        <ul id="waitingList" aria-live="polite"></ul>
+        <button class="btn btn-primary" id="requestMatch" disabled>Request matchmaking</button>
+        <div id="matchResult" style="display: none; margin-top: 20px; padding: 20px; background: rgba(125, 205, 133, 0.1); border-radius: 12px; border: 2px solid var(--vivid-mint);">
+          <h3>Match Found! 🎉</h3>
+          <p id="matchDetails"></p>
+          <p style="margin-top: 12px; font-style: italic; color: var(--olive-slate);">Starting your civilization game...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Civilization Tab -->
+    <div class="tab-content active" id="civilization-tab">
+      <div class="civilization-section">
+        <h2>Nationship Civilization Demo</h2>
+        <p class="caption">Experience how conversations drive your civilization's growth. This is a demo conversation with our AI chatbot.</p>
+        
+        <div id="chatDemo" style="background: rgba(255, 255, 255, 0.6); border-radius: 16px; padding: 24px; margin-bottom: 20px; min-height: 400px; max-height: 500px; overflow-y: auto;">
+          <div class="chat-message" style="background: rgba(125, 205, 133, 0.1); border: 2px solid var(--vivid-mint); border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+            <div style="font-weight: 600; color: var(--deep-forest); margin-bottom: 8px;">🤖 Nationship AI</div>
+            <div>Welcome to Nationship! I'm your AI civilization partner. Let's build an amazing nation together! What should we focus on first - technology, military, or diplomacy?</div>
+          </div>
+        </div>
+        
+        <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+          <input type="text" id="chatInput" placeholder="Type your message..." style="flex: 1; padding: 12px; border: 2px solid var(--deep-forest); border-radius: 8px; font-size: 16px;">
+          <button class="btn btn-primary" id="sendMessage">Send</button>
+        </div>
+        
+        <div style="background: rgba(255, 255, 255, 0.4); border-radius: 12px; padding: 20px; margin-top: 20px;">
+          <h4 style="margin: 0 0 12px 0; color: var(--deep-forest);">Civilization Progress</h4>
+          
+          <!-- Progress Bar -->
+          <div style="margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+              <span style="font-weight: 600; color: var(--deep-forest);">Overall Progress</span>
+              <span style="color: var(--olive-slate);" id="progressPercent"></span>
+            </div>
+            <div style="width: 100%; height: 12px; background: var(--fog-grey); border-radius: 6px; overflow: hidden;">
+              <div id="civilizationProgress" style="height: 100%; background: linear-gradient(90deg, var(--vivid-mint), #69b471); border-radius: 6px; transition: width 0.5s ease; width: 15%;"></div>
+            </div>
+            <div style="text-align: center; margin-top: 8px; font-size: 14px; color: var(--olive-slate);" id="progressStage">Stone Age - Building Foundations</div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 20px;">
+            <div style="text-align: center;">
+              <div style="font-size: 24px; font-weight: 600; color: var(--vivid-mint);">🏛️</div>
+              <div style="font-size: 14px; color: var(--olive-slate);">Government</div>
+              <div style="font-weight: 600;" id="governmentLevel">Tribal Council</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 24px; font-weight: 600; color: var(--vivid-mint);">⚔️</div>
+              <div style="font-size: 14px; color: var(--olive-slate);">Military</div>
+              <div style="font-weight: 600;" id="militaryLevel">Basic Warriors</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 24px; font-weight: 600; color: var(--vivid-mint);">🔬</div>
+              <div style="font-size: 14px; color: var(--olive-slate);">Technology</div>
+              <div style="font-weight: 600;" id="techLevel">Stone Age</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 24px; font-weight: 600; color: var(--vivid-mint);">💎</div>
+              <div style="font-size: 14px; color: var(--olive-slate);">Resources</div>
+              <div style="font-weight: 600;" id="resourceLevel">Growing</div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <button class="btn btn-primary" id="battleBtn" style="background: var(--brick-red); color: white;">
+              ⚔️ Battle
+            </button>
+            <button class="btn btn-primary" id="raidBtn" style="background: var(--amber); color: var(--deep-forest);">
+              🏴‍☠️ Raid
+            </button>
+            <button class="btn btn-primary" id="diplomacyBtn" style="background: var(--vivid-mint); color: var(--deep-forest);">
+              🤝 Diplomacy
+            </button>
+            <button class="btn btn-primary" id="researchBtn" style="background: var(--olive-slate); color: white;">
+              🔬 Research
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="assertive"></div>
+
+  <script>
+    class InteractiveSurvey {
+      constructor() {
+        this.currentQuestion = 1;
+        this.totalQuestions = 9;
+        this.form = document.getElementById('surveyForm');
+        this.statusMessage = document.getElementById('statusMessage');
+        this.otherAnimalInput = document.getElementById('otherAnimal');
+        this.favoriteAnimalSelect = document.getElementById('favoriteAnimal');
+        
+        console.log('Form element found:', this.form);
+        console.log('Status message element found:', this.statusMessage);
+        
+        this.initializeEventListeners();
+        this.updateProgress();
+      }
+
+      initializeEventListeners() {
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+          tab.addEventListener('click', (e) => {
+            this.switchTab(e.target.dataset.tab);
+          });
+        });
+
+        // Handle animal selection
+        this.favoriteAnimalSelect.addEventListener('change', (e) => {
+          if (e.target.value === 'other') {
+            this.otherAnimalInput.style.display = 'block';
+            this.otherAnimalInput.required = true;
+          } else {
+            this.otherAnimalInput.style.display = 'none';
+            this.otherAnimalInput.required = false;
+          }
+        });
+
+        // Handle scale sliders
+        const sliders = ['nationalism', 'deserving', 'politicalLean'];
+        sliders.forEach(sliderId => {
+          const slider = document.getElementById(sliderId);
+          const valueDisplay = document.getElementById(sliderId + 'Value');
+          
+          slider.addEventListener('input', (e) => {
+            const value = parseInt(e.target.value);
+            this.updateSliderDisplay(sliderId, value, valueDisplay);
+          });
+        });
+
+        // Navigation buttons
+        document.getElementById('nextBtn').addEventListener('click', () => {
+          this.nextQuestion();
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+          this.previousQuestion();
+        });
+
+        // Form submission
+        this.form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          console.log('Form submitted!');
+          this.submitSurvey();
+        });
+
+        // Also add click handler to submit button as backup
+        const submitBtn = document.getElementById('submitBtn');
+        if (submitBtn) {
+          submitBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Submit button clicked!');
+            alert('Submit button clicked!'); // Temporary debug
+            this.submitSurvey();
+          });
+        } else {
+          console.error('Submit button not found!');
+        }
+      }
+
+      switchTab(tabName) {
+        // Remove active class from all tabs and content
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        
+        // Add active class to selected tab and content
+        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        document.getElementById(`${tabName}-tab`).classList.add('active');
+      }
+
+      nextQuestion() {
+        if (this.currentQuestion < this.totalQuestions) {
+          this.hideQuestion(this.currentQuestion);
+          this.currentQuestion++;
+          this.showQuestion(this.currentQuestion);
+          this.updateProgress();
+          this.updateButtons();
+        }
+      }
+
+      previousQuestion() {
+        if (this.currentQuestion > 1) {
+          this.hideQuestion(this.currentQuestion);
+          this.currentQuestion--;
+          this.showQuestion(this.currentQuestion);
+          this.updateProgress();
+          this.updateButtons();
+        }
+      }
+
+      showQuestion(questionNum) {
+        const questionCard = document.querySelector(`[data-question="${questionNum}"]`);
+        if (questionCard) {
+          questionCard.style.display = 'block';
+          questionCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+
+      hideQuestion(questionNum) {
+        const questionCard = document.querySelector(`[data-question="${questionNum}"]`);
+        if (questionCard) {
+          questionCard.style.display = 'none';
+        }
+      }
+
+      updateButtons() {
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+
+        prevBtn.style.display = this.currentQuestion > 1 ? 'block' : 'none';
+        
+        if (this.currentQuestion === this.totalQuestions) {
+          nextBtn.style.display = 'none';
+          submitBtn.style.display = 'block';
+        } else {
+          nextBtn.style.display = 'block';
+          submitBtn.style.display = 'none';
+        }
+      }
+
+      updateProgress() {
+        const progress = (this.currentQuestion / this.totalQuestions) * 100;
+        document.getElementById('progressFill').style.width = `${progress}%`;
+        document.getElementById('currentQuestion').textContent = this.currentQuestion;
+        document.getElementById('progressPercent').textContent = `${Math.round(progress)}%`;
+      }
+
+      updateSliderDisplay(sliderId, value, displayElement) {
+        const labels = {
+          nationalism: ['1 - Not at all', '2 - Slightly', '3 - Moderate', '4 - Strong', '5 - Very strong'],
+          deserving: ['1 - Everyone equal', '2 - Mostly equal', '3 - Balanced view', '4 - Some more deserving', '5 - Clearly different'],
+          politicalLean: ['1 - Left leaning', '2 - Center-left', '3 - Centrist', '4 - Center-right', '5 - Right leaning']
+        };
+        
+        displayElement.textContent = labels[sliderId][value - 1];
+      }
+
+      async submitSurvey() {
+        console.log('submitSurvey called');
+        const formData = new FormData(this.form);
+        const data = {};
+        
+        for (let [key, value] of formData.entries()) {
+          data[key] = value;
+        }
+        
+        console.log('Form data collected:', data);
+
+        // Handle other animal input
+        if (data.favoriteAnimal === 'other' && data.otherAnimal) {
+          data.favoriteAnimal = data.otherAnimal;
+        }
+
+        try {
+          // Generate a more realistic profile
+          const profileData = {
+            ...data,
+            userId: 'user_' + Date.now(),
+            name: this.generateNameFromSurvey(data),
+            bio: this.generateBioFromSurvey(data),
+            activities: this.generateActivitiesFromSurvey(data),
+            goals: this.generateGoalsFromSurvey(data),
+            values: this.generateValuesFromSurvey(data),
+            createdAt: new Date().toISOString(),
+            surveyCompleted: true
+          };
+          
+          localStorage.setItem('nationship_profile', JSON.stringify(profileData));
+          
+          this.showStatus('Profile created successfully! You can now use matchmaking.', 'success');
+          
+          // Enable matchmaking button
+          document.getElementById('requestMatch').disabled = false;
+          
+          // Update matchmaking status
+          this.updateMatchmakingStatus();
+          
+        } catch (error) {
+          this.showStatus('Error saving survey. Please try again.', 'error');
+          console.error('Error saving survey:', error);
+        }
+      }
+
+      generateNameFromSurvey(data) {
+        const names = ['Alex', 'Jordan', 'Sam', 'Taylor', 'Casey', 'Morgan', 'Riley', 'Avery'];
+        return names[Math.floor(Math.random() * names.length)];
+      }
+
+      generateBioFromSurvey(data) {
+        const threeWords = data.threeWords || 'adventurous, creative, kind';
+        const animal = data.favoriteAnimal || 'wolf';
+        return `I'm ${threeWords} and I identify with the ${animal}. ${data.vacationSpot || 'I love exploring new places and building meaningful connections.'}`;
+      }
+
+      generateActivitiesFromSurvey(data) {
+        const activities = [];
+        if (data.rightVsCreative === 'creative') activities.push('Creative projects', 'Art and design');
+        if (data.rightVsCreative === 'right') activities.push('Volunteering', 'Community service');
+        if (data.nationalism >= 4) activities.push('Political discussions', 'History');
+        if (data.politicalLean <= 2) activities.push('Social justice', 'Environmental activism');
+        if (data.politicalLean >= 4) activities.push('Business', 'Economics');
+        return activities.join(', ') || 'Strategy games, reading, outdoor activities';
+      }
+
+      generateGoalsFromSurvey(data) {
+        const goals = [];
+        if (data.welfareSupport === 'yes') goals.push('Build a supportive society');
+        if (data.deserving >= 4) goals.push('Create a merit-based civilization');
+        if (data.nationalism >= 4) goals.push('Build a strong, unified nation');
+        if (data.politicalLean <= 2) goals.push('Focus on equality and social progress');
+        if (data.politicalLean >= 4) goals.push('Focus on economic growth and stability');
+        return goals.join(', ') || 'Build a thriving civilization together';
+      }
+
+      generateValuesFromSurvey(data) {
+        const values = [];
+        if (data.rightVsCreative === 'creative') values.push('Creativity', 'Innovation');
+        if (data.rightVsCreative === 'right') values.push('Integrity', 'Justice');
+        if (data.welfareSupport === 'yes') values.push('Compassion', 'Community');
+        if (data.deserving <= 2) values.push('Equality', 'Fairness');
+        if (data.nationalism >= 4) values.push('Patriotism', 'Unity');
+        return values.join(', ') || 'Cooperation, growth, mutual respect';
+      }
+
+      updateMatchmakingStatus() {
+        const matchStatus = document.getElementById('matchStatus');
+        matchStatus.textContent = 'Profile created! You can now request matchmaking.';
+        matchStatus.className = 'status-copy success';
+      }
+
+      showStatus(message, type) {
+        this.statusMessage.textContent = message;
+        this.statusMessage.className = `status-message status-${type}`;
+        this.statusMessage.style.display = 'block';
+        
+        setTimeout(() => {
+          this.statusMessage.style.display = 'none';
+        }, 5000);
+      }
+    }
+
+    // Matchmaking functionality
+    class MatchmakingSystem {
+      constructor() {
+        this.requestMatchBtn = document.getElementById('requestMatch');
+        this.matchStatus = document.getElementById('matchStatus');
+        this.matchResult = document.getElementById('matchResult');
+        this.matchDetails = document.getElementById('matchDetails');
+        
+        this.initializeMatchmaking();
+      }
+
+      initializeMatchmaking() {
+        this.requestMatchBtn.addEventListener('click', () => {
+          this.requestMatch();
+        });
+
+        // Check if profile exists and enable matchmaking
+        this.checkProfileStatus();
+      }
+
+      checkProfileStatus() {
+        const profileData = localStorage.getItem('nationship_profile');
+        if (profileData) {
+          try {
+            const profile = JSON.parse(profileData);
+            if (profile.surveyCompleted) {
+              this.requestMatchBtn.disabled = false;
+              this.matchStatus.textContent = 'Profile ready! You can request matchmaking.';
+              this.matchStatus.className = 'status-copy success';
+            }
+          } catch (e) {
+            console.error('Error parsing profile:', e);
+          }
+        }
+      }
+
+      async requestMatch() {
+        this.requestMatchBtn.disabled = true;
+        this.matchStatus.textContent = 'Searching for compatible matches...';
+        this.matchStatus.className = 'status-copy';
+
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
+        // Simulate finding a match
+        const mockMatch = {
+          name: 'Alex',
+          compatibility: 87,
+          bio: 'Creative strategist who loves building civilizations and meaningful conversations.',
+          activities: 'Strategy games, art, hiking',
+          goals: 'Build a thriving, innovative civilization together',
+          values: 'Creativity, cooperation, growth'
+        };
+
+        this.showMatchResult(mockMatch);
+      }
+
+      showMatchResult(match) {
+        this.matchDetails.innerHTML = `
+          <strong>${match.name}</strong> - ${match.compatibility}% compatibility<br>
+          <em>"${match.bio}"</em><br><br>
+          <strong>Activities:</strong> ${match.activities}<br>
+          <strong>Goals:</strong> ${match.goals}<br>
+          <strong>Values:</strong> ${match.values}
+        `;
+        this.matchResult.style.display = 'block';
+        this.matchStatus.textContent = 'Match found! Starting your civilization together...';
+        this.matchStatus.className = 'status-copy success';
+        
+        // Switch to civilization tab and start the game
+        setTimeout(() => {
+          this.startCivilizationGame(match);
+        }, 2000);
+      }
+
+      startCivilizationGame(match) {
+        // Switch to civilization tab
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        
+        document.querySelector('[data-tab="civilization"]').classList.add('active');
+        document.getElementById('civilization-tab').classList.add('active');
+        
+        // Initialize civilization game with match data
+        this.initializeCivilizationGame(match);
+      }
+
+      initializeCivilizationGame(match) {
+        const chatDemo = document.getElementById('chatDemo');
+        const civilizationSection = document.querySelector('.civilization-section');
+        
+        // Clear existing content
+        chatDemo.innerHTML = '';
+        
+        // Add match introduction
+        const matchIntro = document.createElement('div');
+        matchIntro.className = 'chat-message';
+        matchIntro.style.background = 'rgba(125, 205, 133, 0.1)';
+        matchIntro.style.border = '2px solid var(--vivid-mint)';
+        matchIntro.style.borderRadius = '12px';
+        matchIntro.style.padding = '16px';
+        matchIntro.style.marginBottom = '16px';
+        matchIntro.innerHTML = `
+          <div style="font-weight: 600; color: var(--deep-forest); margin-bottom: 8px;">🎉 Match Found!</div>
+          <div>You've been matched with <strong>${match.name}</strong> (${match.compatibility}% compatibility)!</div>
+          <div style="margin-top: 8px; font-style: italic;">"${match.bio}"</div>
+        `;
+        chatDemo.appendChild(matchIntro);
+        
+        // Add AI partner introduction
+        const aiIntro = document.createElement('div');
+        aiIntro.className = 'chat-message';
+        aiIntro.style.background = 'rgba(125, 205, 133, 0.1)';
+        aiIntro.style.border = '2px solid var(--vivid-mint)';
+        aiIntro.style.borderRadius = '12px';
+        aiIntro.style.padding = '16px';
+        aiIntro.style.marginBottom = '16px';
+        aiIntro.innerHTML = `
+          <div style="font-weight: 600; color: var(--deep-forest); margin-bottom: 8px;">🤖 Nationship AI</div>
+          <div>Welcome to your shared civilization! You and ${match.name} will build an amazing nation together. Every conversation drives your civilization's growth. What should we focus on first - technology, military, or diplomacy?</div>
+        `;
+        chatDemo.appendChild(aiIntro);
+        
+        // Update civilization status
+        this.updateCivilizationStatus();
+        
+        // Scroll to civilization tab
+        document.getElementById('civilization-tab').scrollIntoView({ behavior: 'smooth' });
+      }
+
+      updateCivilizationStatus() {
+        const statusContainer = document.querySelector('.civilization-section > div:last-child');
+        if (statusContainer) {
+          statusContainer.innerHTML = `
+            <h4 style="margin: 0 0 12px 0; color: var(--deep-forest);">Your Shared Civilization</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px;">
+              <div style="text-align: center;">
+                <div style="font-size: 24px; font-weight: 600; color: var(--vivid-mint);">🏛️</div>
+                <div style="font-size: 14px; color: var(--olive-slate);">Government</div>
+                <div style="font-weight: 600;">Tribal Council</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-size: 24px; font-weight: 600; color: var(--vivid-mint);">⚔️</div>
+                <div style="font-size: 14px; color: var(--olive-slate);">Military</div>
+                <div style="font-weight: 600;">Basic Warriors</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-size: 24px; font-weight: 600; color: var(--vivid-mint);">🔬</div>
+                <div style="font-size: 14px; color: var(--olive-slate);">Technology</div>
+                <div style="font-weight: 600;">Stone Age</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-size: 24px; font-weight: 600; color: var(--vivid-mint);">💎</div>
+                <div style="font-size: 14px; color: var(--olive-slate);">Resources</div>
+                <div style="font-weight: 600;">Growing</div>
+              </div>
+            </div>
+            <div style="margin-top: 16px; padding: 12px; background: rgba(125, 205, 133, 0.1); border-radius: 8px; text-align: center;">
+              <strong>🎯 Mission:</strong> Build a thriving civilization together through strategic conversations and decisions!
+            </div>
+          `;
+        }
+      }
+    }
+
+    // Chatbot Demo functionality
+    class ChatbotDemo {
+      constructor() {
+        this.chatDemo = document.getElementById('chatDemo');
+        this.chatInput = document.getElementById('chatInput');
+        this.sendBtn = document.getElementById('sendMessage');
+        this.messageCount = 0;
+        
+        this.initializeChat();
+      }
+
+      initializeChat() {
+        this.sendBtn.addEventListener('click', () => {
+          this.sendMessage();
+        });
+
+        this.chatInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            this.sendMessage();
+          }
+        });
+      }
+
+      sendMessage() {
+        const message = this.chatInput.value.trim();
+        if (!message) return;
+
+        // Add user message
+        this.addMessage(message, 'user');
+        this.chatInput.value = '';
+        
+        // Simulate AI response
+        setTimeout(() => {
+          this.addAIResponse(message);
+        }, 1000);
+      }
+
+      addMessage(message, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'chat-message';
+        
+        if (sender === 'user') {
+          messageDiv.style.background = 'rgba(194, 225, 194, 0.1)';
+          messageDiv.style.border = '2px solid var(--deep-forest)';
+          messageDiv.style.marginLeft = '20%';
+          messageDiv.innerHTML = `
+            <div style="font-weight: 600; color: var(--deep-forest); margin-bottom: 8px;">👤 You</div>
+            <div>${message}</div>
+          `;
+        } else {
+          messageDiv.style.background = 'rgba(125, 205, 133, 0.1)';
+          messageDiv.style.border = '2px solid var(--vivid-mint)';
+          messageDiv.innerHTML = `
+            <div style="font-weight: 600; color: var(--deep-forest); margin-bottom: 8px;">🤖 Nationship AI</div>
+            <div>${message}</div>
+          `;
+        }
+        
+        messageDiv.style.borderRadius = '12px';
+        messageDiv.style.padding = '16px';
+        messageDiv.style.marginBottom = '16px';
+        
+        this.chatDemo.appendChild(messageDiv);
+        this.chatDemo.scrollTop = this.chatDemo.scrollHeight;
+      }
+
+      addAIResponse(userMessage) {
+        const responses = [
+          "Mmm, I love how your mind works! 😘 Let's focus on that strategy - you always have the best ideas.",
+          "You're so smart! Our civilization is growing stronger with every decision we make together. 💕",
+          "I'm falling for you more with every message! Let's make sure we're prepared for any challenges ahead. 😍",
+          "Perfect! This is exactly why I'm so attracted to you - that brilliant collaborative thinking! 💖",
+          "Amazing! Our nation is evolving beautifully, just like our connection. What should we tackle next, my brilliant partner? 😘",
+          "I'm so impressed by your strategic thinking! You make me want to build an empire with you forever! 💕",
+          "This is why I love Nationship - every conversation makes our civilization AND our bond stronger! 😍",
+          "Brilliant! Our teamwork is really paying off. You're making me fall for you more each day! Ready for the next challenge, my love? 💖"
+        ];
+
+        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+        this.addMessage(randomResponse, 'ai');
+        this.messageCount++;
+        this.updateProgress();
+      }
+
+      updateProgress() {
+        // Increase progress with each message
+        const currentProgress = Math.min(15 + (this.messageCount * 3), 100);
+        const progressBar = document.getElementById('civilizationProgress');
+        const progressPercent = document.getElementById('progressPercent');
+        const progressStage = document.getElementById('progressStage');
+        
+        console.log('Progress elements found:', {
+          progressBar: !!progressBar,
+          progressPercent: !!progressPercent,
+          progressStage: !!progressStage,
+          currentProgress: currentProgress
+        });
+        
+        if (progressBar && progressPercent && progressStage) {
+          progressBar.style.width = `${currentProgress}%`;
+          progressPercent.textContent = `${currentProgress}%`;
+          
+          // Update stage based on progress
+          let stage = "Stone Age - Building Foundations";
+          if (currentProgress >= 25) stage = "Bronze Age - First Settlements";
+          if (currentProgress >= 50) stage = "Iron Age - Growing Cities";
+          if (currentProgress >= 75) stage = "Classical Era - Great Empires";
+          if (currentProgress >= 90) stage = "Medieval Period - Advanced Kingdoms";
+          if (currentProgress >= 100) stage = "Renaissance - Cultural Golden Age";
+          
+          progressStage.textContent = stage;
+          console.log('Progress updated:', currentProgress, stage);
+        } else {
+          console.error('Progress elements not found!');
+        }
+      }
+    }
+
+    // Battle and Raid System
+    class BattleRaidSystem {
+      constructor() {
+        this.battleBtn = document.getElementById('battleBtn');
+        this.raidBtn = document.getElementById('raidBtn');
+        this.diplomacyBtn = document.getElementById('diplomacyBtn');
+        this.researchBtn = document.getElementById('researchBtn');
+        this.chatDemo = document.getElementById('chatDemo');
+        
+        console.log('BattleRaidSystem elements found:', {
+          battleBtn: !!this.battleBtn,
+          raidBtn: !!this.raidBtn,
+          diplomacyBtn: !!this.diplomacyBtn,
+          researchBtn: !!this.researchBtn,
+          chatDemo: !!this.chatDemo
+        });
+        
+        this.initializeActions();
+      }
+
+      initializeActions() {
+        if (this.battleBtn) {
+          this.battleBtn.addEventListener('click', () => this.startBattle());
+        }
+        if (this.raidBtn) {
+          this.raidBtn.addEventListener('click', () => this.startRaid());
+        }
+        if (this.diplomacyBtn) {
+          this.diplomacyBtn.addEventListener('click', () => this.startDiplomacy());
+        }
+        if (this.researchBtn) {
+          this.researchBtn.addEventListener('click', () => this.startResearch());
+        }
+      }
+
+      startBattle() {
+        const battleMessages = [
+          "⚔️ BATTLE INITIATED! ⚔️",
+          "Our warriors are ready for combat!",
+          "The enemy approaches...",
+          "Victory is ours! Our military grows stronger!",
+          "Our civilization's power increases!"
+        ];
+
+        this.addActionMessage(battleMessages, 'battle');
+        this.updateCivilizationStats('military', 5);
+      }
+
+      startRaid() {
+        const raidMessages = [
+          "🏴‍☠️ RAID LAUNCHED! 🏴‍☠️",
+          "Our raiders set out under cover of darkness...",
+          "They return with valuable resources!",
+          "Our treasury grows richer!",
+          "Our civilization prospers from the spoils!"
+        ];
+
+        this.addActionMessage(raidMessages, 'raid');
+        this.updateCivilizationStats('resources', 4);
+      }
+
+      startDiplomacy() {
+        const diplomacyMessages = [
+          "🤝 DIPLOMACY INITIATED! 🤝",
+          "Our envoys seek peaceful relations...",
+          "We've secured valuable trade agreements!",
+          "Our government becomes more sophisticated!",
+          "Peace and prosperity spread through our lands!"
+        ];
+
+        this.addActionMessage(diplomacyMessages, 'diplomacy');
+        this.updateCivilizationStats('government', 3);
+      }
+
+      startResearch() {
+        const researchMessages = [
+          "🔬 RESEARCH BEGINS! 🔬",
+          "Our scholars work on new discoveries...",
+          "We've unlocked new technologies!",
+          "Our civilization advances to new heights!",
+          "Knowledge is power, and we're getting stronger!"
+        ];
+
+        this.addActionMessage(researchMessages, 'research');
+        this.updateCivilizationStats('technology', 4);
+      }
+
+      addActionMessage(messages, actionType) {
+        messages.forEach((message, index) => {
+          setTimeout(() => {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message';
+            
+            let bgColor = 'rgba(125, 205, 133, 0.1)';
+            let borderColor = 'var(--vivid-mint)';
+            
+            if (actionType === 'battle') {
+              bgColor = 'rgba(184, 76, 76, 0.1)';
+              borderColor = 'var(--brick-red)';
+            } else if (actionType === 'raid') {
+              bgColor = 'rgba(224, 168, 0, 0.1)';
+              borderColor = 'var(--amber)';
+            } else if (actionType === 'diplomacy') {
+              bgColor = 'rgba(125, 205, 133, 0.1)';
+              borderColor = 'var(--vivid-mint)';
+            } else if (actionType === 'research') {
+              bgColor = 'rgba(119, 132, 114, 0.1)';
+              borderColor = 'var(--olive-slate)';
+            }
+            
+            messageDiv.style.background = bgColor;
+            messageDiv.style.border = `2px solid ${borderColor}`;
+            messageDiv.style.borderRadius = '12px';
+            messageDiv.style.padding = '16px';
+            messageDiv.style.marginBottom = '16px';
+            messageDiv.innerHTML = `
+              <div style="font-weight: 600; color: var(--deep-forest); margin-bottom: 8px;">🎮 Nationship AI</div>
+              <div>${message}</div>
+            `;
+            
+            this.chatDemo.appendChild(messageDiv);
+            this.chatDemo.scrollTop = this.chatDemo.scrollHeight;
+          }, index * 1000);
+        });
+      }
+
+      updateCivilizationStats(statType, increase) {
+        const statElements = {
+          military: document.getElementById('militaryLevel'),
+          resources: document.getElementById('resourceLevel'),
+          government: document.getElementById('governmentLevel'),
+          technology: document.getElementById('techLevel')
+        };
+
+        const levelNames = {
+          military: ['Basic Warriors', 'Trained Soldiers', 'Elite Guards', 'Royal Army', 'Imperial Forces'],
+          resources: ['Growing', 'Abundant', 'Rich', 'Wealthy', 'Legendary'],
+          government: ['Tribal Council', 'City Council', 'Royal Court', 'Imperial Court', 'Divine Empire'],
+          technology: ['Stone Age', 'Bronze Age', 'Iron Age', 'Classical Era', 'Renaissance']
+        };
+
+        const element = statElements[statType];
+        if (element) {
+          const currentText = element.textContent;
+          const currentIndex = levelNames[statType].indexOf(currentText);
+          const newIndex = Math.min(currentIndex + 1, levelNames[statType].length - 1);
+          element.textContent = levelNames[statType][newIndex];
+          
+          // Add visual feedback
+          element.style.color = 'var(--vivid-mint)';
+          element.style.transform = 'scale(1.1)';
+          setTimeout(() => {
+            element.style.color = '';
+            element.style.transform = '';
+          }, 1000);
+        }
+      }
+    }
+
+    // Initialize everything when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('Initializing website components...');
+      new InteractiveSurvey();
+      new MatchmakingSystem();
+      new ChatbotDemo();
+      new BattleRaidSystem();
+      console.log('All components initialized');
+    });
+  </script>
+</body>
+</html>

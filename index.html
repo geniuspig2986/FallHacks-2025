@@ -258,14 +258,14 @@
 
     <div id="profileStatus" class="profile-status" style="display: none;">
       <div class="profile-info">
-        <div class="profile-avatar" id="profileAvatar">U</div>
+        <div class="profile-avatar" id="profileAvatar"> </div> 
         <div class="profile-details">
           <h3 id="profileName">User Name</h3>
           <p id="profileBio">User bio will appear here</p>
         </div>
-      </div>
+      </div>  
       <div class="profile-actions">
-        <a href="matchmaking.html" class="btn btn-primary">Find Matches</a>
+        <a href="website.html" class="btn btn-secondary">Matchmaking</a>
         <a href="website.html" class="btn btn-secondary">Edit Profile</a>
       </div>
     </div>
@@ -353,7 +353,7 @@
           // Show profile status
           document.getElementById('profileName').textContent = profile.name;
           document.getElementById('profileBio').textContent = profile.bio || 'No bio provided';
-          document.getElementById('profileAvatar').textContent = profile.name.charAt(0).toUpperCase();
+          document.getElementById('profileAvatar').textContent = '👤';
           
           profileStatus.style.display = 'block';
           ctaButtons.style.display = 'none';

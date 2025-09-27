@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nationship Demo - Hackathon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="nationship-styles.css" />
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, rgba(194, 225, 194, 0.85), rgba(186, 199, 190, 0.65)), #c2e1c2;
+      color: var(--deep-forest);
+      min-height: 100vh;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .demo-header {
+      text-align: center;
+      padding: 40px 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border-bottom: 3px solid var(--vivid-mint);
+    }
+
+    .demo-title {
+      font-family: 'Lora', serif;
+      font-size: 48px;
+      font-weight: 700;
+      margin: 0 0 16px 0;
+      color: var(--deep-forest);
+    }
+
+    .demo-subtitle {
+      font-size: 20px;
+      color: var(--olive-slate);
+      margin: 0 0 24px 0;
+    }
+
+    .demo-description {
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--olive-slate);
+    }
+
+    .demo-controls {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-primary {
+      background: var(--vivid-mint);
+      color: var(--deep-forest);
+    }
+
+    .btn-primary:hover {
+      background: #69b471;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--deep-forest);
+      border: 2px solid var(--deep-forest);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(194, 225, 194, 0.6);
+    }
+
+    .demo-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 20px;
+      border: 2px solid rgba(119, 132, 114, 0.35);
+      padding: 24px;
+      text-align: center;
+      backdrop-filter: blur(6px);
+    }
+
+    .feature-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .feature-title {
+      font-family: 'Lora', serif;
+      font-size: 24px;
+      font-weight: 600;
+      margin: 0 0 12px 0;
+      color: var(--deep-forest);
+    }
+
+    .feature-description {
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--olive-slate);
+    }
+
+    .demo-status {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(36, 49, 25, 0.95);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 14px;
+      z-index: 1000;
+    }
+
+    .demo-status.active {
+      background: rgba(125, 205, 133, 0.95);
+      color: var(--deep-forest);
+    }
+
+    @media (max-width: 768px) {
+      .demo-title {
+        font-size: 36px;
+      }
+      
+      .demo-subtitle {
+        font-size: 18px;
+      }
+      
+      .demo-controls {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-status" id="demoStatus">Demo Ready</div>
+
+  <div class="demo-header">
+    <h1 class="demo-title">Nationship</h1>
+    <p class="demo-subtitle">Civilization Matchmaking for the Modern Age</p>
+    <div class="demo-description">
+      Experience the future of dating where conversations build civilizations. 
+      Chat with your match to grow your shared nation, engage in strategic battles, 
+      and watch your relationship evolve through the ages. Perfect for hackathon demonstrations!
+    </div>
+    <div class="demo-controls">
+      <button class="btn btn-primary" id="startDemo">Start Live Demo</button>
+      <button class="btn btn-secondary" id="showFeatures">View Features</button>
+      <button class="btn btn-secondary" id="resetDemo">Reset Demo</button>
+    </div>
+  </div>
+
+  <div class="demo-features" id="demoFeatures" style="display: none;">
+    <div class="feature-card">
+      <div class="feature-icon">💬</div>
+      <h3 class="feature-title">Smart Chat System</h3>
+      <p class="feature-description">AI-powered chatbot simulates realistic conversations that drive civilization progression and demonstrate the full dating experience.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏛️</div>
+      <h3 class="feature-title">Civilization Building</h3>
+      <p class="feature-description">10 progressive stages from Tribal Beginnings to Transcendent Civilization, each unlocked through meaningful conversation.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚔️</div>
+      <h3 class="feature-title">Strategic Battles</h3>
+      <p class="feature-description">Engage in tactical combat, raids, and diplomacy with risk-reward mechanics that affect your shared civilization.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🗺️</div>
+      <h3 class="feature-title">Interactive Map</h3>
+      <p class="feature-description">Visual territory management with expansion, fortification, and real-time resource tracking.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚠️</div>
+      <h3 class="feature-title">Consequence System</h3>
+      <p class="feature-description">One-sided conversations and inactivity lead to civilization decay, encouraging balanced communication.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎮</div>
+      <h3 class="feature-title">Gamification</h3>
+      <p class="feature-description">Resource management, strategic decisions, and collaborative goal-setting create engaging shared experiences.</p>
+    </div>
+  </div>
+
+  <div id="nationshipContainer" style="display: none;"></div>
+
+  <script src="nationship-civilization.js"></script>
+  <script src="nationship-chatbot.js"></script>
+  <script>
+    let nationship = null;
+    let demoActive = false;
+
+    const elements = {
+      startDemo: document.getElementById('startDemo'),
+      showFeatures: document.getElementById('showFeatures'),
+      resetDemo: document.getElementById('resetDemo'),
+      demoStatus: document.getElementById('demoStatus'),
+      demoFeatures: document.getElementById('demoFeatures'),
+      nationshipContainer: document.getElementById('nationshipContainer')
+    };
+
+    function startDemo() {
+      if (demoActive) return;
+      
+      // Hide header and show Nationship
+      document.querySelector('.demo-header').style.display = 'none';
+      document.querySelector('.demo-features').style.display = 'none';
+      elements.nationshipContainer.style.display = 'block';
+      
+      // Initialize Nationship with chatbot
+      nationship = new NationshipCivilization('nationshipContainer', {
+        enableChatbot: true
+      });
+      
+      // Start demo mode
+      setTimeout(() => {
+        nationship.toggleDemoMode();
+        elements.demoStatus.textContent = 'Demo Active';
+        elements.demoStatus.classList.add('active');
+      }, 1000);
+      
+      demoActive = true;
+      console.log('Demo started with full Nationship experience');
+    }
+
+    function showFeatures() {
+      const features = elements.demoFeatures;
+      if (features.style.display === 'none') {
+        features.style.display = 'grid';
+        elements.showFeatures.textContent = 'Hide Features';
+      } else {
+        features.style.display = 'none';
+        elements.showFeatures.textContent = 'View Features';
+      }
+    }
+
+    function resetDemo() {
+      if (nationship) {
+        nationship.resetCivilization();
+        nationship.stopDemoMode();
+      }
+      
+      // Show header and hide Nationship
+      document.querySelector('.demo-header').style.display = 'block';
+      elements.nationshipContainer.style.display = 'none';
+      elements.demoFeatures.style.display = 'none';
+      
+      elements.demoStatus.textContent = 'Demo Ready';
+      elements.demoStatus.classList.remove('active');
+      elements.showFeatures.textContent = 'View Features';
+      
+      demoActive = false;
+      console.log('Demo reset');
+    }
+
+    // Event listeners
+    elements.startDemo.addEventListener('click', startDemo);
+    elements.showFeatures.addEventListener('click', showFeatures);
+    elements.resetDemo.addEventListener('click', resetDemo);
+
+    // Auto-start demo after 3 seconds for hackathon presentation
+    setTimeout(() => {
+      if (!demoActive) {
+        console.log('Auto-starting demo for hackathon presentation...');
+        startDemo();
+      }
+    }, 3000);
+
+    // Add keyboard shortcuts for demo control
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'd' || e.key === 'D') {
+        if (!demoActive) {
+          startDemo();
+        } else {
+          resetDemo();
+        }
+      } else if (e.key === 'f' || e.key === 'F') {
+        showFeatures();
+      } else if (e.key === 'r' || e.key === 'R') {
+        resetDemo();
+      }
+    });
+
+    console.log('Nationship Demo loaded! Press D to start/stop demo, F to toggle features, R to reset');
+  </script>
+</body>
+</html>

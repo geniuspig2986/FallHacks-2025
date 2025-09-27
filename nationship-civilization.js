@@ -11,6 +11,7 @@ class NationshipCivilization {
       apiHost: options.apiHost || 'http://localhost:8080',
       matchId: options.matchId || null,
       userId: options.userId || null,
+      enableChatbot: options.enableChatbot || false,
       ...options
     };
 
@@ -173,11 +174,17 @@ class NationshipCivilization {
     this.decayTimer = null;
     this.isDecaying = false;
     this.civilizationName = "New Nation";
+    this.chatbot = null;
 
     this.initializeElements();
     this.bindEvents();
     this.startDecayTimer();
     this.updateDisplay();
+    
+    // Initialize chatbot if enabled
+    if (this.options.enableChatbot) {
+      this.initializeChatbot();
+    }
   }
 
   initializeElements() {
@@ -244,6 +251,8 @@ class NationshipCivilization {
             <button class="btn btn-secondary" id="raidButton">Raid Territory</button>
             <button class="btn btn-secondary" id="diplomacyButton">Diplomacy</button>
             <button class="btn btn-secondary" id="autoChatButton">Auto Chat</button>
+            <button class="btn btn-secondary" id="demoModeButton">Demo Mode</button>
+            <button class="btn btn-secondary" id="stopDemoButton" style="display: none;">Stop Demo</button>
           </div>
           
           <div class="progress-section">
@@ -274,6 +283,8 @@ class NationshipCivilization {
           <div class="evolution-text">Civilization Evolved!</div>
         </div>
       </div>
+      
+      <div class="notification" id="notification"></div>
       
       <div class="battle-modal" id="battleModal">
         <div class="battle-content">
@@ -309,13 +320,16 @@ class NationshipCivilization {
       raidButton: document.getElementById('raidButton'),
       diplomacyButton: document.getElementById('diplomacyButton'),
       autoChatButton: document.getElementById('autoChatButton'),
+      demoModeButton: document.getElementById('demoModeButton'),
+      stopDemoButton: document.getElementById('stopDemoButton'),
       expandTerritory: document.getElementById('expandTerritory'),
       fortifyDefenses: document.getElementById('fortifyDefenses'),
       territory: document.getElementById('territory'),
       battleModal: document.getElementById('battleModal'),
       battleLog: document.getElementById('battleLog'),
       battleResult: document.getElementById('battleResult'),
-      closeBattle: document.getElementById('closeBattle')
+      closeBattle: document.getElementById('closeBattle'),
+      notification: document.getElementById('notification')
     };
   }
 
@@ -331,6 +345,8 @@ class NationshipCivilization {
     this.elements.raidButton.addEventListener('click', () => this.startRaid());
     this.elements.diplomacyButton.addEventListener('click', () => this.startDiplomacy());
     this.elements.autoChatButton.addEventListener('click', () => this.toggleAutoChat());
+    this.elements.demoModeButton.addEventListener('click', () => this.toggleDemoMode());
+    this.elements.stopDemoButton.addEventListener('click', () => this.stopDemoMode());
     this.elements.expandTerritory.addEventListener('click', () => this.expandTerritory());
     this.elements.fortifyDefenses.addEventListener('click', () => this.fortifyDefenses());
     this.elements.closeBattle.addEventListener('click', () => this.closeBattle());
@@ -424,7 +440,7 @@ class NationshipCivilization {
   }
 
   collapseCivilization() {
-    alert('Your civilization has collapsed! Insufficient resources and communication led to the fall of your nation. Start over to rebuild!');
+    this.showNotification('Your civilization has collapsed! Insufficient resources and communication led to the fall of your nation. Start over to rebuild!', 'error');
     this.resetCivilization();
   }
 
@@ -570,7 +586,7 @@ class NationshipCivilization {
 
   expandTerritory() {
     if (this.resources.materials < 100) {
-      alert('Not enough materials to expand territory!');
+      this.showNotification('Not enough materials to expand territory!', 'error');
       return;
     }
     
@@ -579,13 +595,13 @@ class NationshipCivilization {
     this.resources.population += 10;
     this.resources.food += 50;
     
-    alert('Territory expanded! Gained 10 population and 50 food!');
+    this.showNotification('Territory expanded! Gained 10 population and 50 food!', 'success');
     this.updateDisplay();
   }
 
   fortifyDefenses() {
     if (this.resources.materials < 75) {
-      alert('Not enough materials to fortify defenses!');
+      this.showNotification('Not enough materials to fortify defenses!', 'error');
       return;
     }
     
@@ -593,7 +609,7 @@ class NationshipCivilization {
     this.defenseLevel++;
     this.militaryPower += 15;
     
-    alert('Defenses fortified! Military power increased by 15!');
+    this.showNotification('Defenses fortified! Military power increased by 15!', 'success');
     this.updateDisplay();
   }
 
@@ -721,6 +737,14 @@ class NationshipCivilization {
     this.elements.battleModal.style.display = 'none';
   }
 
+  showNotification(message, type = 'info') {
+    this.elements.notification.textContent = message;
+    this.elements.notification.className = `notification ${type} show`;
+    setTimeout(() => {
+      this.elements.notification.classList.remove('show');
+    }, 3000);
+  }
+
   resetCivilization() {
     this.currentStage = 0;
     this.totalMessages = 0;
@@ -748,6 +772,161 @@ class NationshipCivilization {
     `;
     
     this.updateDisplay();
+  }
+
+  // Chatbot integration methods
+  initializeChatbot() {
+    if (typeof NationshipChatbot !== 'undefined') {
+      this.chatbot = new NationshipChatbot(this);
+      console.log('Chatbot initialized for demo mode');
+    } else {
+      console.warn('NationshipChatbot not available - demo mode disabled');
+    }
+  }
+
+  toggleDemoMode() {
+    if (this.chatbot) {
+      this.chatbot.startAutoDemo();
+      this.elements.demoModeButton.style.display = 'none';
+      this.elements.stopDemoButton.style.display = 'inline-block';
+      this.elements.autoChatButton.disabled = true;
+      console.log('Demo mode activated');
+    }
+  }
+
+  stopDemoMode() {
+    if (this.chatbot) {
+      this.chatbot.stopDemo();
+      this.elements.demoModeButton.style.display = 'inline-block';
+      this.elements.stopDemoButton.style.display = 'none';
+      this.elements.autoChatButton.disabled = false;
+      console.log('Demo mode deactivated');
+    }
+  }
+
+  // Override battle methods to notify chatbot
+  startBattle() {
+    const enemyPower = Math.floor(this.militaryPower * (0.8 + Math.random() * 0.4));
+    const battleResult = this.simulateBattle(enemyPower);
+    
+    this.elements.battleModal.style.display = 'flex';
+    this.elements.battleLog.innerHTML = '';
+    this.elements.battleResult.innerHTML = '';
+    
+    this.animateBattle(enemyPower, battleResult);
+    
+    // Notify chatbot of battle result
+    if (this.chatbot) {
+      this.chatbot.onBattleResult(battleResult.victory, battleResult.rewards);
+    }
+  }
+
+  startRaid() {
+    if (this.resources.materials < 50) {
+      this.showNotification('Not enough materials to conduct a raid!', 'error');
+      return;
+    }
+    
+    this.resources.materials -= 50;
+    const raidSuccess = Math.random() < 0.7;
+    
+    if (raidSuccess) {
+      const loot = Math.floor(Math.random() * 100) + 50;
+      this.resources.food += loot;
+      this.resources.materials += Math.floor(loot / 2);
+      this.showNotification(`Raid successful! Gained ${loot} food and ${Math.floor(loot / 2)} materials!`, 'success');
+    } else {
+      const losses = Math.floor(Math.random() * 20) + 10;
+      this.resources.population = Math.max(0, this.resources.population - losses);
+      this.showNotification(`Raid failed! Lost ${losses} population in the attempt.`, 'error');
+    }
+    
+    this.updateDisplay();
+    
+    // Notify chatbot of raid result
+    if (this.chatbot) {
+      this.chatbot.onRaidResult(raidSuccess, loot);
+    }
+  }
+
+  startDiplomacy() {
+    const diplomacyOptions = [
+      'Trade Agreement (+50 materials, -30 food)',
+      'Peace Treaty (+100 food, +50 materials)',
+      'Military Alliance (+25 military power)',
+      'Cultural Exchange (+20 population)'
+    ];
+    
+    const choice = Math.floor(Math.random() * diplomacyOptions.length);
+    const option = diplomacyOptions[choice];
+    
+    switch (choice) {
+      case 0:
+        this.resources.materials += 50;
+        this.resources.food = Math.max(0, this.resources.food - 30);
+        break;
+      case 1:
+        this.resources.food += 100;
+        this.resources.materials += 50;
+        break;
+      case 2:
+        this.militaryPower += 25;
+        break;
+      case 3:
+        this.resources.population += 20;
+        break;
+    }
+    
+    this.showNotification(`Diplomacy successful! ${option}`, 'success');
+    this.updateDisplay();
+    
+    // Notify chatbot of diplomacy result
+    if (this.chatbot) {
+      this.chatbot.onDiplomacyResult(true, option);
+    }
+  }
+
+  // Override evolution method to notify chatbot
+  evolveToNextStage() {
+    this.currentStage++;
+    const currentStage = this.stages[this.currentStage - 1];
+    const nextStage = this.stages[this.currentStage];
+    
+    // Update resources and military power based on new stage
+    this.resources = { ...nextStage.resources };
+    this.militaryPower = nextStage.militaryPower;
+    
+    this.showEvolutionAnimation(currentStage, nextStage);
+    this.updateDisplay();
+    
+    // Notify chatbot of stage evolution
+    if (this.chatbot) {
+      this.chatbot.onStageEvolution(this.currentStage);
+    }
+  }
+
+  // Override decay method to notify chatbot
+  triggerDecay(message) {
+    this.isDecaying = true;
+    this.elements.chatStatus.textContent = message;
+    this.elements.chatStatus.style.color = '#b84c4c';
+    
+    // Reduce resources and military power
+    this.resources.food = Math.max(0, this.resources.food - 10);
+    this.resources.materials = Math.max(0, this.resources.materials - 5);
+    this.militaryPower = Math.max(1, this.militaryPower - 2);
+    
+    // Check for civilization collapse
+    if (this.resources.food <= 0 || this.resources.population <= 0) {
+      this.collapseCivilization();
+    }
+    
+    this.updateDisplay();
+    
+    // Notify chatbot of decay
+    if (this.chatbot) {
+      this.chatbot.onDecayWarning();
+    }
   }
 
   // Public API methods

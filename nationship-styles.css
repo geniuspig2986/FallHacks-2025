@@ -1,0 +1,547 @@
+/* Nationship Civilization System Styles */
+
+.nationship-container {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 24px;
+  height: 100vh;
+  padding: 24px;
+  background: linear-gradient(180deg, rgba(194, 225, 194, 0.85), rgba(186, 199, 190, 0.65)), #c2e1c2;
+}
+
+.civilization-main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+}
+
+.civilization-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 20px;
+  border: 2px solid rgba(119, 132, 114, 0.35);
+  padding: 24px;
+  backdrop-filter: blur(6px);
+}
+
+.civilization-title {
+  font-family: 'Lora', serif;
+  font-size: 32px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--deep-forest);
+}
+
+.stage-indicator {
+  background: rgba(36, 49, 25, 0.95);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.civilization-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.map-section {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 20px;
+  border: 2px solid rgba(119, 132, 114, 0.35);
+  padding: 24px;
+  backdrop-filter: blur(6px);
+}
+
+.map-container {
+  position: relative;
+  height: 300px;
+  background: linear-gradient(135deg, #7dcd85, #69b471);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.territory {
+  width: 20px;
+  height: 20px;
+  background: var(--deep-forest);
+  border-radius: 50%;
+  border: 3px solid var(--amber);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.territory::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border: 2px dashed var(--amber);
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+.map-controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.civilization-stats {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 20px;
+  border: 2px solid rgba(119, 132, 114, 0.35);
+  padding: 24px;
+  backdrop-filter: blur(6px);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  border: 2px solid rgba(119, 132, 114, 0.25);
+  padding: 16px;
+  text-align: center;
+}
+
+.stat-value {
+  font-family: 'Lora', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--deep-forest);
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--olive-slate);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.resources-section h3 {
+  font-family: 'Lora', serif;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: var(--deep-forest);
+}
+
+.resource-bar {
+  margin-bottom: 12px;
+}
+
+.resource-bar span {
+  font-size: 14px;
+  color: var(--olive-slate);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.resource-fill {
+  height: 8px;
+  background: var(--vivid-mint);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.resource-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.civilization-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 20px;
+  border: 2px solid rgba(119, 132, 114, 0.35);
+  padding: 24px;
+  backdrop-filter: blur(6px);
+}
+
+.progress-section {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 20px;
+  border: 2px solid rgba(119, 132, 114, 0.35);
+  padding: 24px;
+  backdrop-filter: blur(6px);
+}
+
+.progress-title {
+  font-family: 'Lora', serif;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: var(--deep-forest);
+}
+
+.progress-bar {
+  width: 100%;
+  height: 16px;
+  background: var(--fog-grey);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--vivid-mint), #69b471);
+  border-radius: 8px;
+  transition: width 0.5s ease-out;
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+.progress-text {
+  text-align: center;
+  font-size: 14px;
+  color: var(--olive-slate);
+}
+
+/* Chat Sidebar */
+.chat-sidebar {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 20px;
+  border: 2px solid rgba(119, 132, 114, 0.35);
+  backdrop-filter: blur(6px);
+  overflow: hidden;
+}
+
+.chat-header {
+  padding: 20px;
+  border-bottom: 2px solid rgba(119, 132, 114, 0.2);
+  background: rgba(194, 225, 194, 0.3);
+}
+
+.chat-header h3 {
+  font-family: 'Lora', serif;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: var(--deep-forest);
+}
+
+.chat-status {
+  font-size: 12px;
+  color: var(--olive-slate);
+}
+
+.chat-log {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+.chat-message {
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  border-left: 4px solid var(--vivid-mint);
+}
+
+.chat-message.partner {
+  background: rgba(194, 225, 194, 0.3);
+  border-left-color: var(--amber);
+}
+
+.chat-message.system {
+  background: rgba(186, 199, 190, 0.3);
+  border-left-color: var(--olive-slate);
+  font-style: italic;
+}
+
+.message-time {
+  font-size: 10px;
+  color: var(--olive-slate);
+  margin-bottom: 4px;
+}
+
+.message-content {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--deep-forest);
+}
+
+.chat-input-section {
+  padding: 16px;
+  border-top: 2px solid rgba(119, 132, 114, 0.2);
+  background: rgba(194, 225, 194, 0.2);
+}
+
+.chat-input-section textarea {
+  width: 100%;
+  min-height: 60px;
+  border: 2px solid var(--deep-forest);
+  border-radius: 8px;
+  padding: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  resize: vertical;
+  margin-bottom: 8px;
+}
+
+.chat-input-section textarea:focus {
+  outline: none;
+  border-color: var(--vivid-mint);
+}
+
+/* Buttons */
+.btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.btn-primary {
+  background: var(--vivid-mint);
+  color: var(--deep-forest);
+}
+
+.btn-primary:hover {
+  background: #69b471;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--deep-forest);
+  border: 2px solid var(--deep-forest);
+}
+
+.btn-secondary:hover {
+  background: rgba(194, 225, 194, 0.6);
+}
+
+/* Evolution Animation */
+.evolution-animation {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(36, 49, 25, 0.95);
+  color: white;
+  padding: 32px;
+  border-radius: 20px;
+  text-align: center;
+  z-index: 2000;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.evolution-animation.show {
+  opacity: 1;
+}
+
+.evolution-emoji {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.evolution-text {
+  font-size: 24px;
+  font-weight: 600;
+  font-family: 'Lora', serif;
+}
+
+/* Battle Modal */
+.battle-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
+
+.battle-content {
+  background: white;
+  border-radius: 20px;
+  padding: 32px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.battle-content h3 {
+  font-family: 'Lora', serif;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  color: var(--deep-forest);
+  text-align: center;
+}
+
+.battle-log {
+  background: rgba(186, 199, 190, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.battle-message {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(119, 132, 114, 0.2);
+  font-size: 14px;
+  color: var(--deep-forest);
+}
+
+.battle-message:last-child {
+  border-bottom: none;
+}
+
+.battle-result {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.battle-victory h4 {
+  color: var(--vivid-mint);
+  font-size: 20px;
+  margin: 0 0 8px 0;
+}
+
+.battle-defeat h4 {
+  color: var(--brick-red);
+  font-size: 20px;
+  margin: 0 0 8px 0;
+}
+
+.battle-result p {
+  margin: 4px 0;
+  color: var(--olive-slate);
+}
+
+/* Notification System */
+.notification {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(36, 49, 25, 0.95);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  max-width: 400px;
+  text-align: center;
+}
+
+.notification.show {
+  opacity: 1;
+}
+
+.notification.success {
+  background: rgba(125, 205, 133, 0.95);
+  color: var(--deep-forest);
+}
+
+.notification.error {
+  background: rgba(184, 76, 76, 0.95);
+}
+
+.notification.info {
+  background: rgba(36, 49, 25, 0.95);
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .nationship-container {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  
+  .civilization-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .chat-sidebar {
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .nationship-container {
+    padding: 16px;
+  }
+  
+  .civilization-header {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .civilization-actions {
+    flex-direction: column;
+  }
+  
+  .map-container {
+    height: 200px;
+  }
+}

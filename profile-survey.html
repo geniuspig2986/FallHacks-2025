@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile Survey - Nationship</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --deep-forest: #243119;
+      --olive-slate: #778472;
+      --vivid-mint: #7dcd85;
+      --soft-sage: #c2e1c2;
+      --fog-grey: #bac7be;
+      --amber: #e0a800;
+      --brick-red: #b84c4c;
+      --soft-shadow: 0 20px 40px rgba(36, 49, 25, 0.18);
+      --card-radius: 20px;
+      --transition: 0.2s ease-out;
+      color-scheme: light;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, rgba(194, 225, 194, 0.85), rgba(186, 199, 190, 0.65)), #c2e1c2;
+      color: var(--deep-forest);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: var(--card-radius);
+      border: 2px solid rgba(119, 132, 114, 0.35);
+      box-shadow: var(--soft-shadow);
+      padding: 40px;
+      backdrop-filter: blur(6px);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .brand {
+      font-family: 'Lora', serif;
+      font-weight: 700;
+      font-size: 36px;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .tagline {
+      font-size: 18px;
+      color: var(--olive-slate);
+      margin-bottom: 32px;
+    }
+
+    .survey-form {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .question-group {
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 16px;
+      border: 2px solid rgba(119, 132, 114, 0.25);
+      padding: 24px;
+    }
+
+    .question-title {
+      font-family: 'Lora', serif;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--deep-forest);
+    }
+
+    .question-description {
+      font-size: 14px;
+      color: var(--olive-slate);
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .form-group.horizontal {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    label {
+      font-weight: 500;
+      color: var(--deep-forest);
+      cursor: pointer;
+    }
+
+    input[type="text"], 
+    input[type="color"],
+    textarea,
+    select {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      border: 2px solid var(--deep-forest);
+      border-radius: 8px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.8);
+      color: var(--deep-forest);
+      transition: border-color var(--transition);
+    }
+
+    input[type="text"]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--vivid-mint);
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    input[type="color"] {
+      width: 60px;
+      height: 40px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border: 2px solid rgba(119, 132, 114, 0.3);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.5);
+      transition: all var(--transition);
+      cursor: pointer;
+    }
+
+    .radio-option:hover {
+      border-color: var(--vivid-mint);
+      background: rgba(125, 205, 133, 0.1);
+    }
+
+    .radio-option input[type="radio"] {
+      margin: 0;
+    }
+
+    .radio-option input[type="radio"]:checked + label {
+      color: var(--vivid-mint);
+      font-weight: 600;
+    }
+
+    .radio-option:has(input[type="radio"]:checked) {
+      border-color: var(--vivid-mint);
+      background: rgba(125, 205, 133, 0.15);
+    }
+
+    .scale-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .scale-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: var(--olive-slate);
+    }
+
+    .scale-slider {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: var(--fog-grey);
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .scale-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--vivid-mint);
+      cursor: pointer;
+      border: 2px solid var(--deep-forest);
+    }
+
+    .scale-slider::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--vivid-mint);
+      cursor: pointer;
+      border: 2px solid var(--deep-forest);
+    }
+
+    .actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-top: 40px;
+    }
+
+    .btn {
+      padding: 16px 32px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .btn-primary {
+      background: var(--vivid-mint);
+      color: var(--deep-forest);
+    }
+
+    .btn-primary:hover {
+      background: #69b471;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(125, 205, 133, 0.3);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--deep-forest);
+      border: 2px solid var(--deep-forest);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(194, 225, 194, 0.6);
+    }
+
+    .status-message {
+      text-align: center;
+      padding: 16px;
+      border-radius: 8px;
+      margin-top: 20px;
+      font-weight: 500;
+    }
+
+    .status-success {
+      background: rgba(125, 205, 133, 0.2);
+      color: var(--deep-forest);
+      border: 2px solid var(--vivid-mint);
+    }
+
+    .status-error {
+      background: rgba(184, 76, 76, 0.2);
+      color: var(--brick-red);
+      border: 2px solid var(--brick-red);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--fog-grey);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--vivid-mint), #69b471);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .progress-text {
+      text-align: center;
+      font-size: 14px;
+      color: var(--olive-slate);
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 24px;
+        margin: 10px;
+      }
+      
+      .actions {
+        flex-direction: column;
+      }
+      
+      .radio-group {
+        gap: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="brand">Profile Survey</div>
+      <div class="tagline">Help us understand your personality and preferences to find your perfect civilization partner</div>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+    <div class="progress-text" id="progressText">Complete the survey to build your profile</div>
+
+    <form class="survey-form" id="surveyForm">
+      <!-- Question 1: Favorite Color -->
+      <div class="question-group">
+        <div class="question-title">What is your favourite colour?</div>
+        <div class="question-description">Choose the color that best represents you</div>
+        <div class="form-group">
+          <label for="favoriteColor">Select your favorite color:</label>
+          <input type="color" id="favoriteColor" name="favoriteColor" value="#7dcd85">
+        </div>
+      </div>
+
+      <!-- Question 2: Favorite Animal -->
+      <div class="question-group">
+        <div class="question-title">What is your favourite animal?</div>
+        <div class="question-description">Pick the animal that resonates with your personality</div>
+        <div class="form-group">
+          <label for="favoriteAnimal">Your favorite animal:</label>
+          <select id="favoriteAnimal" name="favoriteAnimal" required>
+            <option value="">Select an animal...</option>
+            <option value="lion">Lion - Bold and courageous</option>
+            <option value="eagle">Eagle - Visionary and free</option>
+            <option value="wolf">Wolf - Loyal and protective</option>
+            <option value="dolphin">Dolphin - Intelligent and playful</option>
+            <option value="elephant">Elephant - Wise and strong</option>
+            <option value="butterfly">Butterfly - Transformative and graceful</option>
+            <option value="tiger">Tiger - Powerful and independent</option>
+            <option value="owl">Owl - Wise and mysterious</option>
+            <option value="other">Other (please specify)</option>
+          </select>
+          <input type="text" id="otherAnimal" name="otherAnimal" placeholder="Specify your favorite animal" style="display: none;">
+        </div>
+      </div>
+
+      <!-- Question 3: Three Words -->
+      <div class="question-group">
+        <div class="question-title">If you could describe yourself with three words, what would they be?</div>
+        <div class="question-description">Share three words that best capture your essence</div>
+        <div class="form-group">
+          <label for="threeWords">Three words that describe you:</label>
+          <input type="text" id="threeWords" name="threeWords" placeholder="e.g., creative, adventurous, kind" required>
+        </div>
+      </div>
+
+      <!-- Question 4: Ideal Vacation Spot -->
+      <div class="question-group">
+        <div class="question-title">Where is your ideal vacation spot?</div>
+        <div class="question-description">Describe your dream destination</div>
+        <div class="form-group">
+          <label for="vacationSpot">Your ideal vacation spot:</label>
+          <textarea id="vacationSpot" name="vacationSpot" placeholder="Describe your perfect vacation destination..." required></textarea>
+        </div>
+      </div>
+
+      <!-- Question 5: Nationalism -->
+      <div class="question-group">
+        <div class="question-title">Do you have a strong sense of nationalism?</div>
+        <div class="question-description">Rate your level of national pride and identity</div>
+        <div class="form-group">
+          <div class="scale-group">
+            <div class="scale-labels">
+              <span>Not at all</span>
+              <span>Very strong</span>
+            </div>
+            <input type="range" class="scale-slider" id="nationalism" name="nationalism" min="1" max="5" value="3">
+            <div style="text-align: center; font-size: 14px; color: var(--olive-slate);">
+              <span id="nationalismValue">3 - Moderate</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 6: Right vs Creative -->
+      <div class="question-group">
+        <div class="question-title">What is more important, doing something you know is right or being creative?</div>
+        <div class="question-description">Choose which value you prioritize more</div>
+        <div class="form-group">
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" id="rightChoice" name="rightVsCreative" value="right">
+              <label for="rightChoice">Doing something I know is right</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="creativeChoice" name="rightVsCreative" value="creative">
+              <label for="creativeChoice">Being creative</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="bothChoice" name="rightVsCreative" value="both">
+              <label for="bothChoice">Both are equally important</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 7: Welfare Support -->
+      <div class="question-group">
+        <div class="question-title">Should we allow welfares?</div>
+        <div class="question-description">Share your thoughts on social welfare programs</div>
+        <div class="form-group">
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" id="welfareYes" name="welfareSupport" value="yes">
+              <label for="welfareYes">Yes, welfare programs are essential</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="welfareNo" name="welfareSupport" value="no">
+              <label for="welfareNo">No, welfare creates dependency</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="welfareConditional" name="welfareSupport" value="conditional">
+              <label for="welfareConditional">Yes, but with conditions and limits</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="welfareUnsure" name="welfareSupport" value="unsure">
+              <label for="welfareUnsure">I'm not sure</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 8: Deserving People -->
+      <div class="question-group">
+        <div class="question-title">Are some people more deserving than others?</div>
+        <div class="question-description">Share your perspective on equality and merit</div>
+        <div class="form-group">
+          <div class="scale-group">
+            <div class="scale-labels">
+              <span>Everyone is equal</span>
+              <span>Some are more deserving</span>
+            </div>
+            <input type="range" class="scale-slider" id="deserving" name="deserving" min="1" max="5" value="3">
+            <div style="text-align: center; font-size: 14px; color: var(--olive-slate);">
+              <span id="deservingValue">3 - Balanced view</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 9: Political Leanings -->
+      <div class="question-group">
+        <div class="question-title">Are you left leaning or right leaning?</div>
+        <div class="question-description">Indicate your general political orientation</div>
+        <div class="form-group">
+          <div class="scale-group">
+            <div class="scale-labels">
+              <span>Left leaning</span>
+              <span>Right leaning</span>
+            </div>
+            <input type="range" class="scale-slider" id="politicalLean" name="politicalLean" min="1" max="5" value="3">
+            <div style="text-align: center; font-size: 14px; color: var(--olive-slate);">
+              <span id="politicalValue">3 - Centrist</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn btn-secondary" id="saveDraft">Save Draft</button>
+        <button type="submit" class="btn btn-primary" id="submitSurvey">Submit Survey</button>
+      </div>
+
+      <div id="statusMessage" class="status-message" style="display: none;"></div>
+    </form>
+  </div>
+
+  <script>
+    class ProfileSurvey {
+      constructor() {
+        this.form = document.getElementById('surveyForm');
+        this.progressFill = document.getElementById('progressFill');
+        this.progressText = document.getElementById('progressText');
+        this.statusMessage = document.getElementById('statusMessage');
+        this.otherAnimalInput = document.getElementById('otherAnimal');
+        this.favoriteAnimalSelect = document.getElementById('favoriteAnimal');
+        
+        this.initializeEventListeners();
+        this.updateProgress();
+      }
+
+      initializeEventListeners() {
+        // Handle animal selection
+        this.favoriteAnimalSelect.addEventListener('change', (e) => {
+          if (e.target.value === 'other') {
+            this.otherAnimalInput.style.display = 'block';
+            this.otherAnimalInput.required = true;
+          } else {
+            this.otherAnimalInput.style.display = 'none';
+            this.otherAnimalInput.required = false;
+          }
+        });
+
+        // Handle scale sliders
+        const sliders = ['nationalism', 'deserving', 'politicalLean'];
+        sliders.forEach(sliderId => {
+          const slider = document.getElementById(sliderId);
+          const valueDisplay = document.getElementById(sliderId + 'Value');
+          
+          slider.addEventListener('input', (e) => {
+            const value = parseInt(e.target.value);
+            this.updateSliderDisplay(sliderId, value, valueDisplay);
+          });
+        });
+
+        // Handle form submission
+        this.form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          this.submitSurvey();
+        });
+
+        // Handle save draft
+        document.getElementById('saveDraft').addEventListener('click', () => {
+          this.saveDraft();
+        });
+
+        // Update progress on form changes
+        this.form.addEventListener('input', () => {
+          this.updateProgress();
+        });
+      }
+
+      updateSliderDisplay(sliderId, value, displayElement) {
+        const labels = {
+          nationalism: ['1 - Not at all', '2 - Slightly', '3 - Moderate', '4 - Strong', '5 - Very strong'],
+          deserving: ['1 - Everyone equal', '2 - Mostly equal', '3 - Balanced view', '4 - Some more deserving', '5 - Clearly different'],
+          politicalLean: ['1 - Left leaning', '2 - Center-left', '3 - Centrist', '4 - Center-right', '5 - Right leaning']
+        };
+        
+        displayElement.textContent = labels[sliderId][value - 1];
+      }
+
+      updateProgress() {
+        const formData = new FormData(this.form);
+        const totalQuestions = 9;
+        let completedQuestions = 0;
+
+        // Check each question for completion
+        const requiredFields = [
+          'favoriteColor', 'favoriteAnimal', 'threeWords', 'vacationSpot',
+          'nationalism', 'rightVsCreative', 'welfareSupport', 'deserving', 'politicalLean'
+        ];
+
+        requiredFields.forEach(field => {
+          const value = formData.get(field);
+          if (value && value.trim() !== '') {
+            completedQuestions++;
+          }
+        });
+
+        const progress = (completedQuestions / totalQuestions) * 100;
+        this.progressFill.style.width = `${progress}%`;
+        this.progressText.textContent = `${completedQuestions}/${totalQuestions} questions completed`;
+      }
+
+      saveDraft() {
+        const formData = this.collectFormData();
+        localStorage.setItem('surveyDraft', JSON.stringify(formData));
+        this.showStatus('Draft saved successfully!', 'success');
+      }
+
+      loadDraft() {
+        const draft = localStorage.getItem('surveyDraft');
+        if (draft) {
+          const data = JSON.parse(draft);
+          this.populateForm(data);
+          this.showStatus('Draft loaded successfully!', 'success');
+        }
+      }
+
+      populateForm(data) {
+        Object.keys(data).forEach(key => {
+          const element = document.querySelector(`[name="${key}"]`);
+          if (element) {
+            if (element.type === 'radio') {
+              const radio = document.querySelector(`[name="${key}"][value="${data[key]}"]`);
+              if (radio) radio.checked = true;
+            } else {
+              element.value = data[key];
+            }
+          }
+        });
+        this.updateProgress();
+      }
+
+      collectFormData() {
+        const formData = new FormData(this.form);
+        const data = {};
+        
+        for (let [key, value] of formData.entries()) {
+          data[key] = value;
+        }
+
+        // Handle other animal input
+        if (data.favoriteAnimal === 'other' && data.otherAnimal) {
+          data.favoriteAnimal = data.otherAnimal;
+        }
+
+        return data;
+      }
+
+      async submitSurvey() {
+        const formData = this.collectFormData();
+        
+        // Validate required fields
+        if (!this.validateForm(formData)) {
+          return;
+        }
+
+        try {
+          // Save to text file
+          await this.saveToFile(formData);
+          
+          // Clear draft
+          localStorage.removeItem('surveyDraft');
+          
+          this.showStatus('Survey submitted successfully! Your answers have been saved.', 'success');
+          
+          // Reset form after successful submission
+          setTimeout(() => {
+            this.form.reset();
+            this.updateProgress();
+          }, 2000);
+          
+        } catch (error) {
+          this.showStatus('Error saving survey. Please try again.', 'error');
+          console.error('Error saving survey:', error);
+        }
+      }
+
+      validateForm(data) {
+        const requiredFields = ['favoriteAnimal', 'threeWords', 'vacationSpot', 'rightVsCreative', 'welfareSupport'];
+        
+        for (let field of requiredFields) {
+          if (!data[field] || data[field].trim() === '') {
+            this.showStatus(`Please complete the ${field.replace(/([A-Z])/g, ' $1').toLowerCase()} question.`, 'error');
+            return false;
+          }
+        }
+        
+        return true;
+      }
+
+      async saveToFile(data) {
+        const timestamp = new Date().toISOString();
+        const filename = `survey_responses_${timestamp.split('T')[0]}.txt`;
+        
+        // Format the data for the text file
+        const formattedData = `
+SURVEY RESPONSES - ${timestamp}
+=====================================
+
+1. Favorite Color: ${data.favoriteColor}
+2. Favorite Animal: ${data.favoriteAnimal}
+3. Three Words: ${data.threeWords}
+4. Ideal Vacation Spot: ${data.vacationSpot}
+5. Nationalism Level: ${data.nationalism}/5
+6. Right vs Creative: ${data.rightVsCreative}
+7. Welfare Support: ${data.welfareSupport}
+8. Deserving People: ${data.deserving}/5
+9. Political Leanings: ${data.politicalLean}/5
+
+=====================================
+Survey completed at: ${timestamp}
+        `.trim();
+
+        // Create and download the file
+        const blob = new Blob([formattedData], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
+      showStatus(message, type) {
+        this.statusMessage.textContent = message;
+        this.statusMessage.className = `status-message status-${type}`;
+        this.statusMessage.style.display = 'block';
+        
+        setTimeout(() => {
+          this.statusMessage.style.display = 'none';
+        }, 5000);
+      }
+    }
+
+    // Initialize the survey when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      const survey = new ProfileSurvey();
+      
+      // Try to load draft on page load
+      survey.loadDraft();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nationship — Civilization Matchmaking</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="nationship-styles.css" />
+  <style>
+    :root {
+      --deep-forest: #243119;
+      --olive-slate: #778472;
+      --vivid-mint: #7dcd85;
+      --soft-sage: #c2e1c2;
+      --fog-grey: #bac7be;
+      --amber: #e0a800;
+      --brick-red: #b84c4c;
+      --soft-shadow: 0 20px 40px rgba(36, 49, 25, 0.18);
+      --card-radius: 20px;
+      --transition: 0.2s ease-out;
+      color-scheme: light;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, rgba(194, 225, 194, 0.85), rgba(186, 199, 190, 0.65)), #c2e1c2;
+      color: var(--deep-forest);
+      min-height: 100vh;
+    }
+
+    header.top-bar {
+      padding: 48px clamp(24px, 6vw, 80px) 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .brand {
+      font-family: 'Lora', serif;
+      font-weight: 700;
+      font-size: clamp(32px, 5vw, 48px);
+      line-height: 1.2;
+    }
+
+    .tagline {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--olive-slate);
+    }
+
+    main.layout {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 24px;
+      padding: 0 clamp(24px, 6vw, 80px) 64px;
+    }
+
+    section.card {
+      grid-column: span 4;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: var(--card-radius);
+      border: 2px solid rgba(119, 132, 114, 0.35);
+      box-shadow: var(--soft-shadow);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      backdrop-filter: blur(6px);
+    }
+
+    section.card.wide {
+      grid-column: span 8;
+    }
+
+    section.card.full {
+      grid-column: span 12;
+    }
+
+    h2 {
+      margin: 0;
+      font-family: 'Lora', serif;
+      font-weight: 600;
+      font-size: 32px;
+      line-height: 1.3;
+    }
+
+    h3 {
+      margin: 0;
+      font-family: 'Lora', serif;
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+
+    p, label, span, div, li {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .caption {
+      font-size: 14px;
+      line-height: 1.4;
+      color: var(--olive-slate);
+    }
+
+    form.profile-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    label.field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    label.field span {
+      font-weight: 600;
+    }
+
+    input[type="text"], textarea, input[type="url"], input[type="number"] {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      border: none;
+      border-bottom: 2px solid var(--deep-forest);
+      padding: 8px 4px;
+      background: transparent;
+      color: var(--deep-forest);
+      transition: border-color var(--transition);
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--fog-grey);
+    }
+
+    input:focus-visible,
+    textarea:focus-visible,
+    select:focus-visible,
+    button:focus-visible {
+      outline: 3px solid rgba(125, 205, 133, 0.55);
+      outline-offset: 3px;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-bottom-color: var(--vivid-mint);
+    }
+
+    textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
+
+    .actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    button.primary {
+      background: var(--vivid-mint);
+      color: var(--deep-forest);
+      border: none;
+      border-radius: 12px;
+      padding: 12px 24px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+    }
+
+    button.primary:hover {
+      transform: translateY(-2px) scale(1.02);
+      background: #69b471;
+      box-shadow: 0 12px 24px rgba(125, 205, 133, 0.35);
+    }
+
+    button.primary:active {
+      transform: translateY(0) scale(0.99);
+    }
+
+    button.secondary {
+      background: transparent;
+      color: var(--deep-forest);
+      border-radius: 12px;
+      border: 2px solid var(--deep-forest);
+      padding: 12px 24px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+    }
+
+    button.secondary:hover {
+      background: rgba(194, 225, 194, 0.6);
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      background: var(--fog-grey);
+      color: var(--olive-slate);
+      border-color: transparent;
+      box-shadow: none;
+    }
+
+    ul.waiting-list,
+    ul.progress-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .queue-item,
+    .progress-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      border-radius: 16px;
+      border: 2px solid rgba(119, 132, 114, 0.35);
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .queue-empty {
+      color: var(--olive-slate);
+      padding: 8px 0;
+    }
+
+    .status-copy {
+      font-size: 16px;
+      color: var(--olive-slate);
+      min-height: 1.5em;
+    }
+
+    .status-copy.error {
+      color: var(--brick-red);
+    }
+
+    .status-copy.success {
+      color: var(--vivid-mint);
+      font-weight: 600;
+    }
+
+    .civilization-card {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .country-header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .country-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      color: var(--olive-slate);
+    }
+
+    .progress-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .progress-track {
+      height: 12px;
+      border-radius: 8px;
+      background: var(--fog-grey);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: var(--vivid-mint);
+      border-radius: 8px;
+      transition: width 0.4s ease-out;
+    }
+
+    .chat-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .chat-box {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-height: 320px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .chat-message {
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 16px;
+      border: 2px solid rgba(119, 132, 114, 0.3);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chat-message.self {
+      align-self: flex-end;
+      border-color: rgba(125, 205, 133, 0.6);
+      box-shadow: 0 12px 24px rgba(125, 205, 133, 0.25);
+    }
+
+    .chat-meta {
+      font-size: 14px;
+      color: var(--olive-slate);
+    }
+
+    .chat-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    select {
+      font-size: 16px;
+      border: 2px solid var(--deep-forest);
+      border-radius: 12px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.6);
+      color: var(--deep-forest);
+    }
+
+    .map-growth {
+      position: relative;
+      border-radius: 18px;
+      border: 2px dashed rgba(119, 132, 114, 0.45);
+      padding: 24px;
+      background: linear-gradient(135deg, rgba(186, 199, 190, 0.35), rgba(194, 225, 194, 0.65));
+      overflow: hidden;
+    }
+
+    .map-growth::before,
+    .map-growth::after {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: rgba(125, 205, 133, 0.18);
+      animation: mapPulse 12s ease-in-out infinite;
+      transform: scale(0.6);
+    }
+
+    .map-growth::before {
+      top: -60px;
+      right: -40px;
+    }
+
+    .map-growth::after {
+      bottom: -70px;
+      left: -30px;
+      animation-delay: 6s;
+    }
+
+    @keyframes mapPulse {
+      0%, 100% {
+        transform: scale(0.75);
+        opacity: 0.35;
+      }
+      50% {
+        transform: scale(1);
+        opacity: 0.6;
+      }
+    }
+
+    .ceremony {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .flag {
+      width: 36px;
+      height: 24px;
+      background: var(--vivid-mint);
+      border: 2px solid var(--deep-forest);
+      border-radius: 4px;
+      position: relative;
+      transform-origin: left center;
+    }
+
+    .flag::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: -8px;
+      width: 2px;
+      height: 100%;
+      background: var(--deep-forest);
+      transform: translateY(-50%);
+    }
+
+    .ceremony--active .flag {
+      animation: flagWave 0.6s var(--transition) 2;
+    }
+
+    @keyframes flagWave {
+      0%, 100% {
+        transform: rotate(0deg);
+      }
+      50% {
+        transform: rotate(-6deg);
+      }
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120%);
+      background: rgba(36, 49, 25, 0.95);
+      color: white;
+      padding: 16px 24px;
+      border-radius: 16px;
+      box-shadow: 0 16px 32px rgba(36, 49, 25, 0.45);
+      font-size: 16px;
+      transition: transform 0.3s ease-out;
+      z-index: 1000;
+    }
+
+    .toast.visible {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 1024px) {
+      main.layout {
+        grid-template-columns: repeat(8, 1fr);
+      }
+      section.card {
+        grid-column: span 8;
+      }
+      section.card.wide,
+      section.card.full {
+        grid-column: span 8;
+      }
+      form.profile-grid {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      header.top-bar {
+        padding: 32px 24px 24px;
+      }
+      main.layout {
+        grid-template-columns: repeat(4, 1fr);
+        padding: 0 24px 48px;
+        gap: 20px;
+      }
+      section.card,
+      section.card.wide,
+      section.card.full {
+        grid-column: span 4;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-bar">
+    <div class="brand">Nationship</div>
+    <div class="tagline">Meet your match, build your nation, and conquer the world together.</div>
+  </header>
+
+  <main class="layout">
+    <section class="card profile-card wide" aria-labelledby="profile-heading">
+      <div>
+        <h2 id="profile-heading">Tell us about your constellation</h2>
+        <p class="caption">Share a few essentials and we will queue you for a compatible co-architect.</p>
+      </div>
+      <form class="profile-grid" novalidate>
+        <label class="field" for="name">
+          <span>Name</span>
+          <input id="name" name="name" type="text" maxlength="48" placeholder="Evelyn" autocomplete="name" />
+        </label>
+        <label class="field" for="apiHost">
+          <span>Backend host</span>
+          <input id="apiHost" name="apiHost" type="text" placeholder="http://localhost:8080" value="http://localhost:8080" />
+          <span class="caption">Where the ChronaLink backend is running.</span>
+        </label>
+        <label class="field" for="bio">
+          <span>Story snapshot</span>
+          <textarea id="bio" name="bio" placeholder="Glacial hikes, analog photography, tea rituals…"></textarea>
+        </label>
+        <label class="field" for="activities">
+          <span>Favorite activities</span>
+          <input id="activities" name="activities" type="text" placeholder="urban foraging, stargazing, zine-making" />
+        </label>
+        <label class="field" for="goals">
+          <span>Relationship goals</span>
+          <input id="goals" name="goals" type="text" placeholder="slow burn, creative collaborator" />
+        </label>
+        <label class="field" for="values">
+          <span>Core values</span>
+          <input id="values" name="values" type="text" placeholder="curiosity, honesty, playfulness" />
+        </label>
+      </form>
+      <div class="actions">
+        <button class="primary" id="createProfile">Create profile</button>
+        <button class="secondary" id="clearForm" type="button">Reset</button>
+      </div>
+      <div id="profileStatus" class="status-copy" role="status" aria-live="polite"></div>
+    </section>
+
+    <section class="card queue-card" aria-labelledby="queue-heading">
+      <div>
+        <h2 id="queue-heading">Matchmaking queue</h2>
+        <p class="caption">We pair compatible voyagers as soon as two profiles align.</p>
+      </div>
+      <div class="status-copy" id="matchStatus" role="status" aria-live="polite"></div>
+      <ul class="waiting-list" id="waitingList" aria-live="polite"></ul>
+      <button class="primary" id="requestMatch">Request matchmaking</button>
+    </section>
+
+    <section class="card civilization-card full" aria-labelledby="civilization-heading">
+      <div>
+        <h2 id="civilization-heading">Nationship Civilization</h2>
+        <p class="caption">Build your nation together through strategic conversations, battles, and raids.</p>
+      </div>
+      <div id="nationshipContainer"></div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="assertive"></div>
+
+  <script src="nationship-civilization.js"></script>
+  <script>
+    const state = {
+      apiHost: 'http://localhost:8080',
+      userId: null,
+      matchId: null,
+      participants: [],
+      queueInterval: null,
+      matchInterval: null,
+      ceremonyTimer: null,
+      nationship: null
+    };
+
+    const elements = {
+      apiHost: document.getElementById('apiHost'),
+      name: document.getElementById('name'),
+      bio: document.getElementById('bio'),
+      activities: document.getElementById('activities'),
+      goals: document.getElementById('goals'),
+      values: document.getElementById('values'),
+      createProfile: document.getElementById('createProfile'),
+      clearForm: document.getElementById('clearForm'),
+      profileStatus: document.getElementById('profileStatus'),
+      requestMatch: document.getElementById('requestMatch'),
+      matchStatus: document.getElementById('matchStatus'),
+      waitingList: document.getElementById('waitingList'),
+      countryName: document.getElementById('countryName'),
+      economyLabel: document.getElementById('economyLabel'),
+      economyLevel: document.getElementById('economyLevel'),
+      compatibilityScore: document.getElementById('compatibilityScore'),
+      progressFill: document.getElementById('progressFill'),
+      progressTrack: document.getElementById('progressTrack'),
+      progressLabel: document.getElementById('progressLabel'),
+      newCountryName: document.getElementById('newCountryName'),
+      renameCountry: document.getElementById('renameCountry'),
+      refreshMatch: document.getElementById('refreshMatch'),
+      dailyProgress: document.getElementById('dailyProgress'),
+      chatSender: document.getElementById('chatSender'),
+      chatBox: document.getElementById('chatBox'),
+      chatInput: document.getElementById('chatInput'),
+      sendMessage: document.getElementById('sendMessage'),
+      loadChat: document.getElementById('loadChat'),
+      chatStatus: document.getElementById('chatStatus'),
+      toast: document.getElementById('toast'),
+      ceremony: document.getElementById('ceremony')
+    };
+
+    function showToast(message, tone = 'neutral') {
+      elements.toast.textContent = message;
+      elements.toast.style.background = tone === 'error'
+        ? 'rgba(184, 76, 76, 0.95)'
+        : tone === 'success'
+        ? 'rgba(125, 205, 133, 0.95)'
+        : 'rgba(36, 49, 25, 0.95)';
+      elements.toast.classList.add('visible');
+      clearTimeout(elements.toast.hideTimer);
+      elements.toast.hideTimer = setTimeout(() => elements.toast.classList.remove('visible'), 3600);
+    }
+
+    function setStatus(element, message, tone = 'neutral') {
+      element.textContent = message;
+      element.classList.remove('error', 'success');
+      if (tone === 'error') {
+        element.classList.add('error');
+      } else if (tone === 'success') {
+        element.classList.add('success');
+      }
+    }
+
+    function resetForm() {
+      [elements.name, elements.bio, elements.activities, elements.goals, elements.values].forEach(field => field.value = '');
+      setStatus(elements.profileStatus, '');
+    }
+
+    function apiUrl(path) {
+      const base = state.apiHost.replace(/\/$/, '');
+      return `${base}${path}`;
+    }
+
+    async function createProfile() {
+      const name = elements.name.value.trim();
+      if (!name) {
+        setStatus(elements.profileStatus, 'Please share your name to join the constellation.', 'error');
+        return;
+      }
+      state.apiHost = elements.apiHost.value.trim() || 'http://localhost:8080';
+      const payload = {
+        name,
+        bio: elements.bio.value,
+        activities: elements.activities.value,
+        goals: elements.goals.value,
+        values: elements.values.value
+      };
+      try {
+        const response = await fetch(apiUrl('/api/users'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error || 'Unable to create profile.');
+        }
+        state.userId = data.userId;
+        setStatus(elements.profileStatus, `Profile for ${name} is live. Your user ID is ${state.userId}.`, 'success');
+        showToast('Profile created — welcome aboard!', 'success');
+        elements.requestMatch.disabled = false;
+        if (!state.queueInterval) {
+          state.queueInterval = setInterval(refreshQueue, 6000);
+        }
+        refreshQueue();
+      } catch (err) {
+        setStatus(elements.profileStatus, err.message, 'error');
+        showToast(err.message, 'error');
+      }
+    }
+
+    async function refreshQueue() {
+      try {
+        const response = await fetch(apiUrl('/api/queue'));
+        if (!response.ok) {
+          throw new Error('Unable to load queue.');
+        }
+        const data = await response.json();
+        renderQueue(data.waiting || []);
+      } catch (err) {
+        setStatus(elements.matchStatus, err.message, 'error');
+      }
+    }
+
+    function renderQueue(waiting) {
+      elements.waitingList.innerHTML = '';
+      if (!waiting.length) {
+        const li = document.createElement('li');
+        li.className = 'queue-empty';
+        li.textContent = 'No voyagers waiting right now — you could be the first!';
+        elements.waitingList.appendChild(li);
+        return;
+      }
+      waiting.forEach(entry => {
+        const li = document.createElement('li');
+        li.className = 'queue-item';
+        const left = document.createElement('div');
+        left.innerHTML = `<strong>${entry.name || 'Voyager ' + entry.userId}</strong>`;
+        const right = document.createElement('span');
+        right.className = 'caption';
+        right.textContent = `User ID ${entry.userId}`;
+        li.append(left, right);
+        elements.waitingList.appendChild(li);
+      });
+    }
+
+    async function requestMatch() {
+      if (!state.userId) {
+        setStatus(elements.matchStatus, 'You need a profile before we can match you.', 'error');
+        return;
+      }
+      try {
+        const response = await fetch(apiUrl('/api/match'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: state.userId })
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error || 'Unable to request a match.');
+        }
+        if (data.status === 'queued') {
+          setStatus(elements.matchStatus, 'You are queued. We will notify you once a partner arrives.');
+          showToast('Queued for matchmaking. Hang tight!');
+          if (!state.queueInterval) {
+            state.queueInterval = setInterval(refreshQueue, 6000);
+          }
+        } else if (data.status === 'matched') {
+          state.matchId = data.matchId;
+          setStatus(elements.matchStatus, `Match found! Match ID ${state.matchId}.`, 'success');
+          showToast('You have a new match! Ceremony commencing.', 'success');
+          triggerCeremony();
+          elements.chatSender.disabled = false;
+          refreshMatch();
+          if (state.matchInterval) {
+            clearInterval(state.matchInterval);
+          }
+          state.matchInterval = setInterval(refreshMatch, 7000);
+        }
+      } catch (err) {
+        setStatus(elements.matchStatus, err.message, 'error');
+        showToast(err.message, 'error');
+      }
+    }
+
+    function triggerCeremony() {
+      elements.ceremony.classList.add('ceremony--active');
+      clearTimeout(state.ceremonyTimer);
+      state.ceremonyTimer = setTimeout(() => elements.ceremony.classList.remove('ceremony--active'), 1800);
+    }
+
+    async function refreshMatch() {
+      if (!state.matchId) {
+        return;
+      }
+      try {
+        const response = await fetch(apiUrl(`/api/match/${state.matchId}`));
+        if (!response.ok) {
+          throw new Error('Unable to load match details.');
+        }
+        const data = await response.json();
+        state.participants = data.participants || [];
+        updateMatchView(data);
+      } catch (err) {
+        setStatus(elements.matchStatus, err.message, 'error');
+      }
+    }
+
+    function updateMatchView(data) {
+      elements.countryName.textContent = data.country?.name || 'Unnamed Nation';
+      elements.economyLevel.textContent = data.country?.economyLevel ?? 0;
+      elements.economyLabel.textContent = data.country?.economyLabel || 'Frontier';
+      const score = Number(data.compatibilityScore || 0);
+      elements.compatibilityScore.textContent = score.toFixed(2);
+      renderParticipants(state.participants);
+      renderChat(data.chat || []);
+      renderDailyProgress(data.dailyProgress || []);
+      updateProgressBar(data.dailyProgress || []);
+    }
+
+    function renderParticipants(participants) {
+      elements.chatSender.innerHTML = '';
+      if (!participants.length) {
+        const opt = document.createElement('option');
+        opt.value = '';
+        opt.textContent = 'Waiting for participants…';
+        elements.chatSender.appendChild(opt);
+        elements.chatSender.disabled = true;
+        return;
+      }
+      participants.forEach((participant, index) => {
+        const option = document.createElement('option');
+        option.value = participant.id;
+        option.textContent = participant.name || `Participant ${index + 1}`;
+        elements.chatSender.appendChild(option);
+      });
+      elements.chatSender.disabled = false;
+      if (!elements.chatSender.value && participants[0]) {
+        elements.chatSender.value = participants[0].id;
+      }
+    }
+
+    function renderChat(chat) {
+      elements.chatBox.innerHTML = '';
+      const senderId = Number(elements.chatSender.value);
+      chat.forEach(item => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'chat-message';
+        if (senderId === Number(item.userId)) {
+          wrapper.classList.add('self');
+        }
+        const meta = document.createElement('div');
+        meta.className = 'chat-meta';
+        meta.textContent = `User ${item.userId} • ${item.timestamp}`;
+        const text = document.createElement('div');
+        text.textContent = item.message;
+        wrapper.append(meta, text);
+        elements.chatBox.appendChild(wrapper);
+      });
+      elements.chatBox.scrollTop = elements.chatBox.scrollHeight;
+    }
+
+    function renderDailyProgress(entries) {
+      elements.dailyProgress.innerHTML = '';
+      if (!entries.length) {
+        const li = document.createElement('li');
+        li.className = 'progress-item';
+        li.textContent = 'No milestones logged yet. Alternate messages to earn your first economy boost!';
+        elements.dailyProgress.appendChild(li);
+        return;
+      }
+      entries
+        .sort((a, b) => new Date(a.day) - new Date(b.day))
+        .forEach(entry => {
+          const li = document.createElement('li');
+          li.className = 'progress-item';
+          const day = document.createElement('span');
+          day.textContent = entry.day;
+          const minutes = document.createElement('strong');
+          minutes.textContent = `${entry.minutes} min`;
+          li.append(day, minutes);
+          elements.dailyProgress.appendChild(li);
+        });
+    }
+
+    function updateProgressBar(entries) {
+      const today = entries.reduce((latest, entry) => (entry.day > latest.day ? entry : latest), { day: '', minutes: 0 });
+      const value = Math.min(Number(today.minutes || 0), 30);
+      const percent = (value / 30) * 100;
+      elements.progressFill.style.width = `${percent}%`;
+      elements.progressTrack.setAttribute('aria-valuenow', value.toString());
+      elements.progressLabel.textContent = value >= 30
+        ? 'Goal met today — economy is thriving!'
+        : `Today's conversation: ${value.toFixed(0)} / 30 minutes`;
+    }
+
+    async function sendChatMessage() {
+      if (!state.matchId || !state.userId) {
+        setStatus(elements.chatStatus, 'You need an active match before sending messages.', 'error');
+        return;
+      }
+      const message = elements.chatInput.value.trim();
+      const senderId = Number(elements.chatSender.value);
+      if (!message) {
+        setStatus(elements.chatStatus, 'Craft a message before sending.', 'error');
+        return;
+      }
+      if (!senderId) {
+        setStatus(elements.chatStatus, 'Select who you are speaking as.', 'error');
+        return;
+      }
+      try {
+        const response = await fetch(apiUrl(`/api/match/${state.matchId}/chat`), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: senderId, message })
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error || 'Unable to send message.');
+        }
+        elements.chatInput.value = '';
+        setStatus(elements.chatStatus, 'Message sent.', 'success');
+        renderChat(data.chat || []);
+        renderDailyProgress(data.dailyProgress || []);
+        updateProgressBar(data.dailyProgress || []);
+      } catch (err) {
+        setStatus(elements.chatStatus, err.message, 'error');
+        showToast(err.message, 'error');
+      }
+    }
+
+    async function loadChat() {
+      if (!state.matchId) {
+        return;
+      }
+      try {
+        const response = await fetch(apiUrl(`/api/match/${state.matchId}/chat`));
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error || 'Unable to load chat.');
+        }
+        renderChat(data.chat || []);
+        renderDailyProgress(data.dailyProgress || []);
+        updateProgressBar(data.dailyProgress || []);
+      } catch (err) {
+        setStatus(elements.chatStatus, err.message, 'error');
+      }
+    }
+
+    async function renameCountry() {
+      if (!state.matchId) {
+        showToast('Match with someone first, then rename your nation.');
+        return;
+      }
+      const name = elements.newCountryName.value.trim();
+      if (!name) {
+        showToast('Country names need at least one character.', 'error');
+        return;
+      }
+      try {
+        const response = await fetch(apiUrl(`/api/match/${state.matchId}/country`), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name })
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error || 'Unable to rename country.');
+        }
+        elements.newCountryName.value = '';
+        updateMatchView(data);
+        showToast('Country renamed successfully!', 'success');
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    function initNationship() {
+      if (state.nationship) {
+        state.nationship.resetCivilization();
+      } else {
+        state.nationship = new NationshipCivilization('nationshipContainer', {
+          apiHost: state.apiHost,
+          matchId: state.matchId,
+          userId: state.userId
+        });
+      }
+    }
+
+    function init() {
+      elements.createProfile.addEventListener('click', event => {
+        event.preventDefault();
+        createProfile();
+      });
+      elements.clearForm.addEventListener('click', event => {
+        event.preventDefault();
+        resetForm();
+      });
+      elements.requestMatch.addEventListener('click', event => {
+        event.preventDefault();
+        requestMatch();
+      });
+      elements.refreshMatch.addEventListener('click', event => {
+        event.preventDefault();
+        refreshMatch();
+      });
+      elements.apiHost.addEventListener('change', () => {
+        state.apiHost = elements.apiHost.value.trim() || 'http://localhost:8080';
+      });
+
+      elements.requestMatch.disabled = true;
+      refreshQueue();
+      state.queueInterval = setInterval(refreshQueue, 8000);
+      
+      // Initialize Nationship system
+      initNationship();
+    }
+
+    init();
+  </script>
+</body>
+</html>

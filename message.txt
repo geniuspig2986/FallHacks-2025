@@ -1,0 +1,195 @@
+🌿 Civilization Dating App Design System
+
+Brand Personality: Contemporary + Vintage
+Audience: 18–26 years old
+Primary Goal: Encourage users to meet new people and co-create civilizations together in a fun, memorable, game-like experience.
+
+1. 🎨 Color System
+Primary Palette
+
+Deep Forest #243119
+
+Usage: Headings, primary text, outlines, high-contrast UI.
+
+Olive Slate #778472
+
+Usage: Secondary text, muted accents, card outlines.
+
+Vivid Mint #7DCD85
+
+Usage: Primary CTAs, highlight states, progress fill.
+
+Soft Sage #C2E1C2
+
+Usage: Backgrounds, cards, large neutral areas.
+
+Fog Grey #BAC7BE
+
+Usage: Dividers, inactive states, subtle secondary backgrounds.
+
+Supporting Colors
+
+Success: Vivid Mint (reuse)
+
+Warning: Amber #E0A800
+
+Error: Brick Red #B84C4C
+
+Do’s & Don’ts
+
+✅ Use Vivid Mint only for primary action buttons and progress highlights.
+✅ Keep Deep Forest as the default text color for legibility.
+❌ Don’t layer Olive Slate on Fog Grey (low contrast).
+❌ Don’t use more than 2 accents per screen (avoid visual clutter).
+
+2. ✍️ Typography
+Font Families
+
+Headings: Lora (serif, timeless, slightly vintage)
+
+Body & UI: Inter (sans-serif, clean, modern)
+
+Hierarchy & Sizes
+
+H1 – Lora Bold, 48px, Line-height 1.2
+
+Usage: Landing titles, key screen headers.
+
+H2 – Lora SemiBold, 32px, Line-height 1.3
+
+Usage: Section titles, modal headers.
+
+H3 – Lora Regular, 24px, Line-height 1.3
+
+Usage: Card titles, profile headers.
+
+Body – Inter Regular, 16px, Line-height 1.5
+
+Usage: Descriptive text, form labels.
+
+Caption – Inter Light, 14px, Line-height 1.4
+
+Usage: Secondary info, tooltips.
+
+Do’s & Don’ts
+
+✅ Use Lora only for headers/titles — never for body text.
+✅ Keep Inter at 16px minimum for readability.
+❌ Don’t mix heading levels in a single section.
+❌ Avoid italicized body text (hurts legibility).
+
+3. 📐 Spacing & Grid
+Grid System
+
+Desktop: 12-column grid, 80px margins, 24px gutters.
+
+Tablet: 8-column grid, 48px margins, 20px gutters.
+
+Mobile: 4-column grid, 24px margins, 16px gutters.
+
+Spacing Scale (8px baseline system)
+
+XS: 4px
+
+S: 8px
+
+M: 16px
+
+L: 24px
+
+XL: 32px
+
+XXL: 48px
+
+Usage:
+
+Between text & buttons: M (16px)
+
+Between cards: L (24px)
+
+Page padding: XL (32px desktop, 24px mobile)
+
+4. 🧩 Components
+Buttons
+
+Primary Button
+
+Fill: Vivid Mint #7DCD85
+
+Text: Deep Forest #243119, Inter SemiBold 16px
+
+Border-radius: 12px
+
+Hover: Darker Mint shade #69B471, scale 1.05
+
+Disabled: Fog Grey background, Olive Slate text
+
+Secondary Button
+
+Outline: Deep Forest
+
+Text: Deep Forest
+
+Hover: Fill with Soft Sage
+
+Do’s & Don’ts
+✅ Keep all CTAs consistent in style.
+❌ Don’t use red or amber for CTAs (reserved for alerts).
+
+Cards
+
+Base Style
+
+Background: Soft Sage #C2E1C2 or Fog Grey #BAC7BE
+
+Border: Olive Slate #778472, 2px
+
+Title: Lora Bold 24px, Deep Forest
+
+Body: Inter 16px, Olive Slate
+
+Padding: L (24px)
+
+Variants: Profile Card, Civilization Card, Match Result Card.
+
+Progress Bar
+
+Base
+
+Track: Fog Grey #BAC7BE
+
+Fill: Vivid Mint #7DCD85
+
+Label: Inter 14px, Olive Slate
+
+Border-radius: 8px
+
+Forms
+
+Input Fields:
+
+Border-bottom only, Deep Forest
+
+Focus state: underline → Vivid Mint
+
+Placeholder: Fog Grey
+
+Labels: Inter SemiBold 14px, Deep Forest
+
+Errors: Brick Red text below input
+
+5. ✨ Interactions & Animations
+
+Civilization Ceremony Animation: Two flags unfurl and merge when a match happens.
+
+Map Growth Animation: As couples interact, background maps expand with new landmarks.
+
+Button Micro-interactions: Bounce/scale effect on click (0.2s ease-out).
+
+6. 🔒 Accessibility
+
+Minimum contrast ratio: 4.5:1 for body text, 3:1 for large text.
+
+All interactive elements must have hover + focus states.
+
+Avoid using color alone to indicate state (e.g., use icons + labels).

@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChronaLink Civilization Simulator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --deep-forest: #243119;
+      --olive-slate: #778472;
+      --vivid-mint: #7dcd85;
+      --soft-sage: #c2e1c2;
+      --fog-grey: #bac7be;
+      --amber: #e0a800;
+      --brick-red: #b84c4c;
+      --soft-shadow: 0 20px 40px rgba(36, 49, 25, 0.18);
+      --card-radius: 20px;
+      --transition: 0.2s ease-out;
+      color-scheme: light;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, rgba(194, 225, 194, 0.85), rgba(186, 199, 190, 0.65)), #c2e1c2;
+      color: var(--deep-forest);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .brand {
+      font-family: 'Lora', serif;
+      font-weight: 700;
+      font-size: 48px;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .tagline {
+      font-size: 18px;
+      color: var(--olive-slate);
+      margin-bottom: 32px;
+    }
+
+    .civilization-display {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+
+    .stage-card {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: var(--card-radius);
+      border: 2px solid rgba(119, 132, 114, 0.35);
+      box-shadow: var(--soft-shadow);
+      padding: 32px;
+      backdrop-filter: blur(6px);
+    }
+
+    .stage-title {
+      font-family: 'Lora', serif;
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--deep-forest);
+    }
+
+    .stage-description {
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--olive-slate);
+      margin-bottom: 24px;
+    }
+
+    .stage-features {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .stage-features li {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(119, 132, 114, 0.2);
+      font-size: 14px;
+      color: var(--olive-slate);
+    }
+
+    .stage-features li:last-child {
+      border-bottom: none;
+    }
+
+    .progress-section {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: var(--card-radius);
+      border: 2px solid rgba(119, 132, 114, 0.35);
+      box-shadow: var(--soft-shadow);
+      padding: 32px;
+      backdrop-filter: blur(6px);
+      margin-bottom: 32px;
+    }
+
+    .progress-title {
+      font-family: 'Lora', serif;
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: var(--deep-forest);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 20px;
+      background: var(--fog-grey);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--vivid-mint), #69b471);
+      border-radius: 10px;
+      transition: width 0.5s ease-out;
+      position: relative;
+    }
+
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .progress-text {
+      text-align: center;
+      font-size: 16px;
+      color: var(--olive-slate);
+      margin-bottom: 24px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 16px;
+      border: 2px solid rgba(119, 132, 114, 0.25);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-family: 'Lora', serif;
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--deep-forest);
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--olive-slate);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .chat-simulator {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: var(--card-radius);
+      border: 2px solid rgba(119, 132, 114, 0.35);
+      box-shadow: var(--soft-shadow);
+      padding: 32px;
+      backdrop-filter: blur(6px);
+    }
+
+    .chat-title {
+      font-family: 'Lora', serif;
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: var(--deep-forest);
+    }
+
+    .chat-controls {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .btn-primary {
+      background: var(--vivid-mint);
+      color: var(--deep-forest);
+    }
+
+    .btn-primary:hover {
+      background: #69b471;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--deep-forest);
+      border: 2px solid var(--deep-forest);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(194, 225, 194, 0.6);
+    }
+
+    .chat-log {
+      max-height: 400px;
+      overflow-y: auto;
+      border: 2px solid rgba(119, 132, 114, 0.2);
+      border-radius: 12px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .chat-message {
+      margin-bottom: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.8);
+      border-left: 4px solid var(--vivid-mint);
+    }
+
+    .chat-message.system {
+      background: rgba(194, 225, 194, 0.3);
+      border-left-color: var(--amber);
+      font-style: italic;
+    }
+
+    .message-time {
+      font-size: 12px;
+      color: var(--olive-slate);
+      margin-bottom: 4px;
+    }
+
+    .message-content {
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .stage-indicator {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(36, 49, 25, 0.95);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 25px;
+      font-weight: 600;
+      box-shadow: 0 8px 16px rgba(36, 49, 25, 0.3);
+      z-index: 1000;
+    }
+
+    .evolution-animation {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(36, 49, 25, 0.95);
+      color: white;
+      padding: 32px;
+      border-radius: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 600;
+      z-index: 2000;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .evolution-animation.show {
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .civilization-display {
+        grid-template-columns: 1fr;
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .container {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="stage-indicator" id="stageIndicator">Stage: Caveman Era</div>
+  
+  <div class="evolution-animation" id="evolutionAnimation">
+    <div>🦕 → 🏛️</div>
+    <div>Civilization Evolved!</div>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <div class="brand">ChronaLink Civilization Simulator</div>
+      <div class="tagline">Watch your civilization evolve through the ages as you chat and connect</div>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-title">Civilization Progress</div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      </div>
+      <div class="progress-text" id="progressText">Start chatting to begin your civilization's journey!</div>
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="totalMessages">0</div>
+          <div class="stat-label">Messages Sent</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="chatMinutes">0</div>
+          <div class="stat-label">Chat Minutes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="currentStage">1</div>
+          <div class="stat-label">Current Stage</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="nextEvolution">50</div>
+          <div class="stat-label">Messages to Next Stage</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="civilization-display">
+      <div class="stage-card">
+        <div class="stage-title">Current Era</div>
+        <div class="stage-description" id="currentEraDescription">
+          You are primitive cave dwellers, communicating through basic sounds and gestures. 
+          Your civilization is just beginning to form, with simple tools and basic social structures.
+        </div>
+        <ul class="stage-features" id="currentEraFeatures">
+          <li>• Basic communication through sounds</li>
+          <li>• Simple stone tools</li>
+          <li>• Small family groups</li>
+          <li>• Nomadic lifestyle</li>
+        </ul>
+      </div>
+
+      <div class="stage-card">
+        <div class="stage-title">Next Era Preview</div>
+        <div class="stage-description" id="nextEraDescription">
+          As you continue to communicate and build relationships, your civilization will evolve 
+          into a more complex society with agriculture, permanent settlements, and advanced tools.
+        </div>
+        <ul class="stage-features" id="nextEraFeatures">
+          <li>• Advanced language development</li>
+          <li>• Agricultural practices</li>
+          <li>• Permanent settlements</li>
+          <li>• Social hierarchies</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="chat-simulator">
+      <div class="chat-title">Chat Simulator</div>
+      <div class="chat-controls">
+        <button class="btn btn-primary" id="simulateChat">Simulate Chat Activity</button>
+        <button class="btn btn-secondary" id="resetCivilization">Reset Civilization</button>
+        <button class="btn btn-secondary" id="autoChat">Auto Chat (5s intervals)</button>
+      </div>
+      <div class="chat-log" id="chatLog">
+        <div class="chat-message system">
+          <div class="message-time">System</div>
+          <div class="message-content">Welcome to ChronaLink! Start chatting to build your civilization together.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    class CivilizationSimulator {
+      constructor() {
+        this.stages = [
+          {
+            name: "Caveman Era",
+            description: "You are primitive cave dwellers, communicating through basic sounds and gestures. Your civilization is just beginning to form, with simple tools and basic social structures.",
+            features: [
+              "• Basic communication through sounds",
+              "• Simple stone tools", 
+              "• Small family groups",
+              "• Nomadic lifestyle"
+            ],
+            messagesRequired: 0,
+            emoji: "🦕"
+          },
+          {
+            name: "Stone Age",
+            description: "Your people have developed more sophisticated tools and communication. They're beginning to settle in specific areas and develop early forms of agriculture.",
+            features: [
+              "• Advanced stone tools and weapons",
+              "• Early agriculture and farming",
+              "• Permanent settlements",
+              "• Basic social organization"
+            ],
+            messagesRequired: 50,
+            emoji: "🪨"
+          },
+          {
+            name: "Bronze Age",
+            description: "Metallurgy has been discovered! Your civilization now works with bronze, creating stronger tools and weapons. Trade networks begin to form.",
+            features: [
+              "• Bronze tools and weapons",
+              "• Trade networks",
+              "• Written language development",
+              "• Complex social structures"
+            ],
+            messagesRequired: 100,
+            emoji: "⚔️"
+          },
+          {
+            name: "Iron Age",
+            description: "Iron working has revolutionized your civilization. You now have access to superior tools and weapons, enabling larger settlements and more complex societies.",
+            features: [
+              "• Iron tools and weapons",
+              "• Large cities and kingdoms",
+              "• Advanced agriculture",
+              "• Military organization"
+            ],
+            messagesRequired: 200,
+            emoji: "🏰"
+          },
+          {
+            name: "Classical Era",
+            description: "Your civilization has reached a golden age of culture, philosophy, and governance. Great cities rise, and complex systems of government and law develop.",
+            features: [
+              "• Philosophy and science",
+              "• Monumental architecture",
+              "• Complex government systems",
+              "• Cultural achievements"
+            ],
+            messagesRequired: 350,
+            emoji: "🏛️"
+          },
+          {
+            name: "Medieval Era",
+            description: "Your civilization has developed sophisticated feudal systems, advanced agriculture, and impressive architectural achievements. Trade and culture flourish.",
+            features: [
+              "• Feudal systems and kingdoms",
+              "• Advanced agriculture",
+              "• Gothic architecture",
+              "• Trade guilds and commerce"
+            ],
+            messagesRequired: 500,
+            emoji: "🏰"
+          },
+          {
+            name: "Renaissance",
+            description: "A period of great cultural and intellectual awakening. Your civilization experiences a rebirth of learning, art, and scientific discovery.",
+            features: [
+              "• Scientific revolution",
+              "• Artistic masterpieces",
+              "• Exploration and discovery",
+              "• Humanistic philosophy"
+            ],
+            messagesRequired: 700,
+            emoji: "🎨"
+          },
+          {
+            name: "Industrial Age",
+            description: "The industrial revolution transforms your civilization. Machines and factories revolutionize production, and cities grow rapidly with new technologies.",
+            features: [
+              "• Steam power and machinery",
+              "• Mass production",
+              "• Urbanization",
+              "• Transportation networks"
+            ],
+            messagesRequired: 1000,
+            emoji: "🏭"
+          },
+          {
+            name: "Modern Era",
+            description: "Your civilization has reached the modern age with advanced technology, global communication, and sophisticated social systems.",
+            features: [
+              "• Advanced technology",
+              "• Global communication",
+              "• Democratic governance",
+              "• Space exploration"
+            ],
+            messagesRequired: 1500,
+            emoji: "🚀"
+          },
+          {
+            name: "Future Civilization",
+            description: "Your civilization has transcended traditional boundaries, achieving technological marvels and creating a utopian society based on cooperation and innovation.",
+            features: [
+              "• Advanced AI and robotics",
+              "• Space colonization",
+              "• Perfect harmony",
+              "• Transcendent wisdom"
+            ],
+            messagesRequired: 2000,
+            emoji: "🌟"
+          }
+        ];
+
+        this.currentStage = 0;
+        this.totalMessages = 0;
+        this.chatMinutes = 0;
+        this.autoChatInterval = null;
+        this.chatMessages = [
+          "Hello! How are you today?",
+          "I love this app! The concept is so unique.",
+          "What kind of civilization should we build together?",
+          "I think we should focus on technology first.",
+          "Maybe we could create a peaceful society?",
+          "I'm excited to see how this progresses!",
+          "This is such a cool way to get to know someone.",
+          "What's your favorite part of history?",
+          "I love learning about ancient civilizations.",
+          "Should we try to be more creative in our approach?",
+          "I think we're making great progress!",
+          "This is so much fun!",
+          "I can't wait to see what happens next.",
+          "We're really building something special here.",
+          "I love how this encourages meaningful conversation.",
+          "What do you think our next goal should be?",
+          "I'm so glad we matched!",
+          "This is the most interesting dating app I've used.",
+          "I love how we're building a civilization together.",
+          "We should celebrate our progress!"
+        ];
+
+        this.initializeElements();
+        this.bindEvents();
+        this.updateDisplay();
+      }
+
+      initializeElements() {
+        this.elements = {
+          stageIndicator: document.getElementById('stageIndicator'),
+          evolutionAnimation: document.getElementById('evolutionAnimation'),
+          progressFill: document.getElementById('progressFill'),
+          progressText: document.getElementById('progressText'),
+          totalMessages: document.getElementById('totalMessages'),
+          chatMinutes: document.getElementById('chatMinutes'),
+          currentStage: document.getElementById('currentStage'),
+          nextEvolution: document.getElementById('nextEvolution'),
+          currentEraDescription: document.getElementById('currentEraDescription'),
+          currentEraFeatures: document.getElementById('currentEraFeatures'),
+          nextEraDescription: document.getElementById('nextEraDescription'),
+          nextEraFeatures: document.getElementById('nextEraFeatures'),
+          chatLog: document.getElementById('chatLog'),
+          simulateChat: document.getElementById('simulateChat'),
+          resetCivilization: document.getElementById('resetCivilization'),
+          autoChat: document.getElementById('autoChat')
+        };
+      }
+
+      bindEvents() {
+        this.elements.simulateChat.addEventListener('click', () => this.simulateChat());
+        this.elements.resetCivilization.addEventListener('click', () => this.resetCivilization());
+        this.elements.autoChat.addEventListener('click', () => this.toggleAutoChat());
+      }
+
+      simulateChat() {
+        const messages = Math.floor(Math.random() * 3) + 1; // 1-3 messages
+        for (let i = 0; i < messages; i++) {
+          this.addMessage();
+        }
+        this.updateProgress();
+      }
+
+      addMessage() {
+        this.totalMessages++;
+        this.chatMinutes += Math.random() * 2 + 0.5; // 0.5-2.5 minutes per message
+        
+        const message = this.chatMessages[Math.floor(Math.random() * this.chatMessages.length)];
+        const timestamp = new Date().toLocaleTimeString();
+        
+        const messageElement = document.createElement('div');
+        messageElement.className = 'chat-message';
+        messageElement.innerHTML = `
+          <div class="message-time">${timestamp}</div>
+          <div class="message-content">${message}</div>
+        `;
+        
+        this.elements.chatLog.appendChild(messageElement);
+        this.elements.chatLog.scrollTop = this.elements.chatLog.scrollHeight;
+        
+        this.checkForEvolution();
+      }
+
+      checkForEvolution() {
+        const currentStageData = this.stages[this.currentStage];
+        const nextStageData = this.stages[this.currentStage + 1];
+        
+        if (nextStageData && this.totalMessages >= nextStageData.messagesRequired) {
+          this.evolveToNextStage();
+        }
+      }
+
+      evolveToNextStage() {
+        this.currentStage++;
+        this.showEvolutionAnimation();
+        this.updateDisplay();
+      }
+
+      showEvolutionAnimation() {
+        const currentStage = this.stages[this.currentStage - 1];
+        const nextStage = this.stages[this.currentStage];
+        
+        this.elements.evolutionAnimation.innerHTML = `
+          <div>${currentStage.emoji} → ${nextStage.emoji}</div>
+          <div>Evolved to ${nextStage.name}!</div>
+        `;
+        
+        this.elements.evolutionAnimation.classList.add('show');
+        
+        setTimeout(() => {
+          this.elements.evolutionAnimation.classList.remove('show');
+        }, 3000);
+      }
+
+      updateProgress() {
+        const currentStageData = this.stages[this.currentStage];
+        const nextStageData = this.stages[this.currentStage + 1];
+        
+        if (nextStageData) {
+          const progress = Math.min(
+            (this.totalMessages - currentStageData.messagesRequired) / 
+            (nextStageData.messagesRequired - currentStageData.messagesRequired) * 100,
+            100
+          );
+          this.elements.progressFill.style.width = `${progress}%`;
+          this.elements.nextEvolution.textContent = Math.max(0, nextStageData.messagesRequired - this.totalMessages);
+        } else {
+          this.elements.progressFill.style.width = '100%';
+          this.elements.nextEvolution.textContent = 'Max Level!';
+        }
+      }
+
+      updateDisplay() {
+        const currentStageData = this.stages[this.currentStage];
+        const nextStageData = this.stages[this.currentStage + 1];
+        
+        // Update stage indicator
+        this.elements.stageIndicator.textContent = `Stage: ${currentStageData.name}`;
+        
+        // Update stats
+        this.elements.totalMessages.textContent = this.totalMessages;
+        this.elements.chatMinutes.textContent = Math.floor(this.chatMinutes);
+        this.elements.currentStage.textContent = this.currentStage + 1;
+        
+        // Update current era
+        this.elements.currentEraDescription.textContent = currentStageData.description;
+        this.elements.currentEraFeatures.innerHTML = currentStageData.features.join('<br>');
+        
+        // Update next era preview
+        if (nextStageData) {
+          this.elements.nextEraDescription.textContent = nextStageData.description;
+          this.elements.nextEraFeatures.innerHTML = nextStageData.features.join('<br>');
+        } else {
+          this.elements.nextEraDescription.textContent = "Congratulations! You've reached the pinnacle of civilization development.";
+          this.elements.nextEraFeatures.innerHTML = "• Perfect society achieved<br>• All technologies mastered<br>• Ultimate harmony reached";
+        }
+        
+        // Update progress
+        this.updateProgress();
+        
+        // Update progress text
+        if (nextStageData) {
+          this.elements.progressText.textContent = `Progress to ${nextStageData.name}: ${this.totalMessages}/${nextStageData.messagesRequired} messages`;
+        } else {
+          this.elements.progressText.textContent = "Maximum civilization level reached! 🌟";
+        }
+      }
+
+      toggleAutoChat() {
+        if (this.autoChatInterval) {
+          clearInterval(this.autoChatInterval);
+          this.autoChatInterval = null;
+          this.elements.autoChat.textContent = 'Auto Chat (5s intervals)';
+          this.elements.autoChat.classList.remove('btn-primary');
+          this.elements.autoChat.classList.add('btn-secondary');
+        } else {
+          this.autoChatInterval = setInterval(() => {
+            this.simulateChat();
+          }, 5000);
+          this.elements.autoChat.textContent = 'Stop Auto Chat';
+          this.elements.autoChat.classList.remove('btn-secondary');
+          this.elements.autoChat.classList.add('btn-primary');
+        }
+      }
+
+      resetCivilization() {
+        this.currentStage = 0;
+        this.totalMessages = 0;
+        this.chatMinutes = 0;
+        
+        if (this.autoChatInterval) {
+          clearInterval(this.autoChatInterval);
+          this.autoChatInterval = null;
+          this.elements.autoChat.textContent = 'Auto Chat (5s intervals)';
+          this.elements.autoChat.classList.remove('btn-primary');
+          this.elements.autoChat.classList.add('btn-secondary');
+        }
+        
+        this.elements.chatLog.innerHTML = `
+          <div class="chat-message system">
+            <div class="message-time">System</div>
+            <div class="message-content">Civilization reset! Start fresh and build your world from the beginning.</div>
+          </div>
+        `;
+        
+        this.updateDisplay();
+      }
+    }
+
+    // Initialize the simulator when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      new CivilizationSimulator();
+    });
+  </script>
+</body>
+</html>

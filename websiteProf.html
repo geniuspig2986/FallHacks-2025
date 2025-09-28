@@ -512,7 +512,7 @@
           <div class="question-card" data-question="1">
             <div class="question-number">Question 1</div>
             <h3 class="question-title">What is your favourite colour?</h3>
-            <p class="question-description">Choose the color that best represents you</p>
+            <p class="question-description">Choose the colour that best represents you</p>
             <div class="form-group">
               <label for="favoriteColor">Select your favorite color:</label>
               <input type="color" id="favoriteColor" name="favoriteColor" value="#7dcd85">
@@ -528,14 +528,14 @@
               <label for="favoriteAnimal">Your favorite animal:</label>
               <select id="favoriteAnimal" name="favoriteAnimal" required>
                 <option value="">Select an animal...</option>
-                <option value="lion">Lion - Bold and courageous</option>
-                <option value="eagle">Eagle - Visionary and free</option>
-                <option value="wolf">Wolf - Loyal and protective</option>
-                <option value="dolphin">Dolphin - Intelligent and playful</option>
-                <option value="elephant">Elephant - Wise and strong</option>
-                <option value="butterfly">Butterfly - Transformative and graceful</option>
-                <option value="tiger">Tiger - Powerful and independent</option>
-                <option value="owl">Owl - Wise and mysterious</option>
+                <option value="lion">Lion</option>
+                <option value="eagle">Eagle</option>
+                <option value="wolf">Wolf</option>
+                <option value="dolphin">Dolphin</option>
+                <option value="elephant">Elephant</option>
+                <option value="butterfly">Butterfly</option>
+                <option value="tiger">Tiger</option>
+                <option value="owl">Owl</option>
                 <option value="other">Other (please specify)</option>
               </select>
               <input type="text" id="otherAnimal" name="otherAnimal" placeholder="Specify your favorite animal" style="display: none;">
@@ -546,7 +546,7 @@
           <div class="question-card" data-question="3" style="display: none;">
             <div class="question-number">Question 3</div>
             <h3 class="question-title">If you could describe yourself with three words, what would they be?</h3>
-            <p class="question-description">Share three words that best capture your essence</p>
+            <p class="question-description">Share three words that best describes you</p>
             <div class="form-group">
               <label for="threeWords">Three words that describe you:</label>
               <input type="text" id="threeWords" name="threeWords" placeholder="e.g., creative, adventurous, kind" required>
@@ -568,11 +568,11 @@
           <div class="question-card" data-question="5" style="display: none;">
             <div class="question-number">Question 5</div>
             <h3 class="question-title">Do you have a strong sense of nationalism?</h3>
-            <p class="question-description">Rate your level of national pride and identity</p>
+            <p class="question-description">Rate your level of national pride</p>
             <div class="form-group">
               <div class="scale-group">
                 <div class="scale-labels">
-                  <span>Not at all</span>
+                  <span>Not strong at all</span>
                   <span>Very strong</span>
                 </div>
                 <input type="range" class="scale-slider" id="nationalism" name="nationalism" min="1" max="5" value="3">
@@ -596,10 +596,6 @@
                   <input type="radio" id="creativeChoice" name="rightVsCreative" value="creative">
                   <label for="creativeChoice">Being creative</label>
                 </div>
-                <div class="radio-option">
-                  <input type="radio" id="bothChoice" name="rightVsCreative" value="both">
-                  <label for="bothChoice">Both are equally important</label>
-                </div>
               </div>
             </div>
           </div>
@@ -613,19 +609,11 @@
               <div class="radio-group">
                 <div class="radio-option">
                   <input type="radio" id="welfareYes" name="welfareSupport" value="yes">
-                  <label for="welfareYes">Yes, welfare programs are essential</label>
+                  <label for="welfareYes">Yes, welfare programs are good</label>
                 </div>
                 <div class="radio-option">
                   <input type="radio" id="welfareNo" name="welfareSupport" value="no">
-                  <label for="welfareNo">No, welfare creates dependency</label>
-                </div>
-                <div class="radio-option">
-                  <input type="radio" id="welfareConditional" name="welfareSupport" value="conditional">
-                  <label for="welfareConditional">Yes, but with conditions and limits</label>
-                </div>
-                <div class="radio-option">
-                  <input type="radio" id="welfareUnsure" name="welfareSupport" value="unsure">
-                  <label for="welfareUnsure">I'm not sure</label>
+                  <label for="welfareNo">No, welfare programs are bad</label>
                 </div>
               </div>
             </div>
@@ -665,10 +653,17 @@
             </div>
           </div>
 
+          <!-- Question 10: Confimation -->
+          <div class="question-card" data-question="10" style="display: none;">
+            <div class="question-number">Confirm?</div>
+            <h3 class="question-title">Are you sure you are good with your answers?</h3>
+            <p class="question-description">You can change your profile later</p> 
+            <button type="submit" class="btn btn-primary" id="submitBtn" style="display: none;">Complete Survey</button>
+          </div>
+
           <div class="survey-actions">
             <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;">Previous</button>
             <button type="button" class="btn btn-primary" id="nextBtn">Next</button>
-            <button type="submit" class="btn btn-primary" id="submitBtn" style="display: none;">Complete Survey</button>
           </div>
 
           <div id="statusMessage" class="status-message" style="display: none;"></div>
@@ -774,7 +769,7 @@
     class InteractiveSurvey {
       constructor() {
         this.currentQuestion = 1;
-        this.totalQuestions = 9;
+        this.totalQuestions = 10;
         this.form = document.getElementById('surveyForm');
         this.statusMessage = document.getElementById('statusMessage');
         this.otherAnimalInput = document.getElementById('otherAnimal');
@@ -920,7 +915,7 @@
         const labels = {
           nationalism: ['1 - Not at all', '2 - Slightly', '3 - Moderate', '4 - Strong', '5 - Very strong'],
           deserving: ['1 - Everyone equal', '2 - Mostly equal', '3 - Balanced view', '4 - Some more deserving', '5 - Clearly different'],
-          politicalLean: ['1 - Left leaning', '2 - Center-left', '3 - Centrist', '4 - Center-right', '5 - Right leaning']
+          politicalLean: ['1 - Left leaning', '2 - Center-left', '3 - Centrist', '4 - Center-right', '5 - Right leaning'],
         };
         
         displayElement.textContent = labels[sliderId][value - 1];

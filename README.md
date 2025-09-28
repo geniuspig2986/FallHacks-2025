@@ -48,7 +48,11 @@ A revolutionary dating app that incorporates civilization expansion for gamified
 ├── nationshiplogo.png          # Title on most pages
 ├── nationshipname.png          # Logo currently unused
 ├── nationship-styles.css       # Complete styling system
+<<<<<<< Updated upstream
 └── README.md                   # This file
+=======
+└── README.md               # This file
+>>>>>>> Stashed changes
 ```
 
 ### Key Technologies
